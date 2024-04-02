@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export interface CategoryData {
-    id: string;
-    name: string;
-    slug: string;
-    category_sku: string;
-    is_featured: boolean;
-    ordering: string;
+  id: number;
+  name: string;
+  slug: string;
+  category_sku: string;
+  is_featured: boolean;
+  ordering: number;
 }
 
 interface CategoryComponentProps {

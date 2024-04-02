@@ -11,7 +11,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path=":categorySlug/" element={<Category />} />
-        <Route path=":categorySlug/:productSlug" element={<Product />} />
+        <Route path=":categorySlug/:productSlug/" element={<Product />} />
         {routes.map((route, index) => (
           <Route
             key={index}

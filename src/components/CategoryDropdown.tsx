@@ -3,12 +3,12 @@ import CategoryComponent from './CategoryComponent';
 import { server_calls } from "../api/server";
 
 interface CategoryData {
-  id: string;
+  id: number;
   name: string;
   slug: string;
   category_sku: string;
   is_featured: boolean;
-  ordering: string;
+  ordering: number;
 }
 
 function CategoryDropdown(): JSX.Element {

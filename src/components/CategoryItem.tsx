@@ -2,12 +2,12 @@ import React from 'react';
 
 export interface CategoryItemProps {
   category: {
-    id: string;
+    id: number;
     name: string;
     slug: string;
     category_sku: string;
-    is_featured: boolean; // Change the type of is_featured to boolean
-    ordering: string;
+    is_featured: boolean;
+    ordering: number;
   };
 }
 
