@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { server_calls, apiURL } from "../api/server";
 import VariationModal from './VariationModal';
 import BackendText from './BackendText';
-// import AddtoCart from './AddtoCart';
 
 interface ImageData {
     id: number;
@@ -23,17 +22,54 @@ interface ProductData {
     images: ImageData[];
 }
 
+interface OptionData {
+    id: number;
+    product: number;
+    variation: number;
+    name: string;
+    slug: string;
+    option_sku: string;
+    description: string;
+    price: number;
+    image: ImageData[];
+    thumbnail: ImageData[];
+    ordering: number;
+}
+
+interface SpecificationData {
+    id: number;
+    product: number;
+    option: number;
+    name: string;
+    slug: string;
+    specification_sku: string;
+    description: string;
+    price: number;
+    num_available: number;
+    is_featured: boolean;
+    image: ImageData[];
+    thumbnail: ImageData[];
+    ordering: number;
+}
+
 interface ProductComponentProps {
     productId: number;
     productSlug: string;
+    onPriceChange: (price: number, productId: number) => void;
+    onOptionSelect: (option: OptionData[]) => void; // Modify to handle array of options
+    onSpecificationSelect: (specification: SpecificationData[]) => void; // Modify to handle array of specifications
+    selectedSpecification: SpecificationData[]; // Add selectedSpecification prop
+    selectedOption: OptionData[]; // Add selectedOption prop
 }
 
-const ProductComponent: React.FC<ProductComponentProps> = ({ productSlug }) => {
+const ProductComponent: React.FC<ProductComponentProps> = ({ productId, productSlug, onPriceChange, onOptionSelect, onSpecificationSelect }) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
     const [product, setProduct] = useState<ProductData | null>(null);
     const [activeImgIndex, setActiveImgIndex] = useState<number>(0);
-    const [amount, setAmount] = useState<number>(1);
+    const [selectedSpecifications, setSelectedSpecifications] = useState<SpecificationData[]>([]); // Updated state to store array of selected specifications
+    const [selectedOptions, setSelectedOptions] = useState<OptionData[]>([]); // Updated state to store array of selected options
+    const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -55,18 +91,33 @@ const ProductComponent: React.FC<ProductComponentProps> = ({ productSlug }) => {
         fetchData();
     }, [productSlug]);
 
+    const handleProductPriceChange = (newPrice: number) => {
+        setSelectedPrice(newPrice);
+        onPriceChange(newPrice, product?.id || 0);
+    };
 
-const [productPrice, setProductPrice] = useState<number | null>(null);
+    // Callback function to receive selected specification data
+    const handleSpecificationSelect = (specification: SpecificationData) => {
+        setSelectedSpecifications([...selectedSpecifications, specification]);
+        onSpecificationSelect(specification);
+    };
 
-    // Callback function to receive price from VariationModal
-const handleProductPriceChange = (newPrice: number, productId: number) => {
-    if (productId === product.id) {
-      setProductPrice(newPrice);
-    }
-  };
+    // Callback function to receive selected option data
+    const handleOptionSelect = (option: OptionData) => {
+        setSelectedOptions([...selectedOptions, option]);
+        onOptionSelect(option);
+    };
 
-const handleImageClick = (index: number) => {
+    const handleImageClick = (index: number) => {
         setActiveImgIndex(index);
+    };
+
+    const [amount, setAmount] = useState<number>(1);
+
+    // Function to handle adding product to cart
+    const handleAddToCart = () => {
+        // Implement the logic to add the selected product to the cart
+        // This could involve sending a request to the server, updating the cart state, etc.
     };
 
     return (
@@ -86,7 +137,6 @@ const handleImageClick = (index: number) => {
                         </div>
                     </div>
                     <div className='flex flex-col gap-10 lg:w-3/4 p-10'>
-
                         <div>
                             {product && product.category && (
                                 <>
@@ -94,27 +144,42 @@ const handleImageClick = (index: number) => {
                                 </>
                             )}
                         </div>
-
-                        <div>
-                            <p className='text-gray-700'>
-                                <BackendText description={product.description} />
-                            </p>
+                        <div className='text-gray-700'>
+                            <BackendText description={product.description} />
                         </div>
-                        
-                        <VariationModal productId={product.id} onPriceChange={handleProductPriceChange} />
-                        {/* Display the product price */}
-                        <h6 className='text-2xl font-semibold'>$ {productPrice !== null ? productPrice : product.price}</h6>
-
-
-                        <div className='flex flex-row items-center gap-12'>
-                            <div className='flex flex-row items-center'>
-                                <button className='bg-primary-red py-2 h-15 w-15 px-5 rounded-lg text-white text-3xl' onClick={() => setAmount((prev) => prev - 1)}>-</button>
-                                <span className='py-4 px-6 rounded-lg text-gray-700 font-bold'>{amount}</span>
-                                <button className='bg-primary-red py-2 h-15 w-15 px-5 rounded-lg text-white text-3xl' onClick={() => setAmount((prev) => prev + 1)}>+</button>
+                        <VariationModal 
+                            productId={product.id}
+                            onPriceChange={handleProductPriceChange}
+                            onOptionSelect={handleOptionSelect} 
+                            onSpecificationSelect={handleSpecificationSelect}
+                        />
+                        <div className='mt-auto'>
+                            <div>
+                                {/* Display the product summary */}
+                                <h3>Your Product Summary:</h3>
+                                <p>Options:</p>
+                                <ul>
+                                    {selectedOptions.map((option, index) => (
+                                        <li key={index}>{option.name}</li>
+                                    ))}
+                                </ul>
+                                <p>Specifications:</p>
+                                <ul>
+                                    {selectedSpecifications.map((specification, index) => (
+                                        <li key={index}>{specification.name}</li>
+                                    ))}
+                                </ul>
+                                <p>Price: ${selectedPrice}</p>
                             </div>
-                            <button className='bg-primary-purple text-white font-bold py-3 px-16 rounded-xl h-15'>Add to Cart</button>
+                            <div className='flex flex-row items-center gap-10 mt-10'>
+                                <div className='flex flex-row items-center'>
+                                    <button className='bg-primary-red py-2 h-15 w-15 px-5 rounded-lg text-white text-3xl' onClick={() => setAmount(prev => prev - 1)}>-</button>
+                                    <span className='py-4 px-6 rounded-lg text-gray-700 font-bold'>{amount}</span>
+                                    <button className='bg-primary-red py-2 h-15 w-15 px-5 rounded-lg text-white text-3xl' onClick={() => setAmount(prev => prev + 1)}>+</button>
+                                </div>
+                                <button className='bg-primary-purple text-white font-bold py-3 px-16 rounded-xl h-15' onClick={handleAddToCart}>Add to Cart</button>
+                            </div>
                         </div>
-
                     </div>
                 </>
             )}
@@ -123,6 +188,7 @@ const handleImageClick = (index: number) => {
 }
 
 export default ProductComponent;
+
 
 
 
