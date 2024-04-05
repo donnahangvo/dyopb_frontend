@@ -36,8 +36,9 @@ interface SpecificationData {
   ordering: number;
 }
 
-const SpecificationDropdown: React.FC<ProductComponentProps & {onPriceChange: (price: number) => void, selectedSpecification: SpecificationData | null, selectedOption: OptionData | null } > = 
-({ productId, optionId, onPriceChange, onSpecificationSelect }) => {
+const SpecificationDropdown: React.FC<ProductComponentProps & 
+{onPriceChange: (price: number) => void, selectedSpecification: SpecificationData | null, selectedOption: OptionData | null } > = 
+({ productId, optionId, onPriceChange }) => {
     const [isOpen, setIsOpen] = useState(true);
     const [specifications, setSpecifications] = useState<SpecificationData[]>([]);
     const [inputValue, setInputValue] = useState("");
@@ -71,7 +72,7 @@ const SpecificationDropdown: React.FC<ProductComponentProps & {onPriceChange: (p
     const handleSpecificationSelect = (specification: SpecificationData) => {
         setSelectedSpecification(specification);
         onPriceChange(specification.price);
-        onSpecificationSelect(specification); // Pass the actual specification object
+        onSpecificationSelect(specification);
     };
     
 
@@ -120,50 +121,42 @@ const SpecificationDropdown: React.FC<ProductComponentProps & {onPriceChange: (p
 
 
 
-
 // Option Modal
 
 
 interface ImageData {
-  id: number;
-  product: number;
-  image: string;
-  thumbnail: string;
-}
+    id: number;
+    product: number;
+    image: string;
+    thumbnail: string;
+  }
+  
+  interface OptionData {
+    id: number;
+    product: number;
+    variation: number;
+    name: string;
+    slug: string;
+    option_sku: string;
+    description: string;
+    price: number;
+    image: ImageData[];
+    thumbnail: ImageData[];
+    ordering: number;
+  }
+  
+  interface ProductComponentProps {
+    productId: number;
+    variationId: number; 
+  }
 
-interface OptionData {
-  id: number;
-  product: number;
-  variation: number;
-  name: string;
-  slug: string;
-  option_sku: string;
-  description: string;
-  price: number;
-  image: ImageData[];
-  thumbnail: ImageData[];
-  ordering: number;
-}
-
-interface ProductComponentProps {
-  productId: number;
-  variationId: number; 
-  onPriceChange: (price: number, productId: number) => void;
-  onOptionSelect: (option: OptionData) => void; 
-  onSpecificationSelect: (specification: SpecificationData) => void; 
-}
-
-
-
-const OptionModal: React.FC<ProductComponentProps & {onPriceChange: (price: number) => void, selectedSpecification: SpecificationData | null, selectedOption: OptionData | null }> = 
-({ productId, variationId, onPriceChange, onOptionSelect }) => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
-  const [options, setOptions] = useState<OptionData[]>([]);
-  const [open, setOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<OptionData | null>(null);
-  const [selectedSpecification, setSelectedSpecification] = useState<SpecificationData | null>(null);
-  const [price, setPrice] = useState<number | null>(null);
+const OptionModal: React.FC<ProductComponentProps & { onPriceChange: (price: number) => void }> = ({ productId, variationId, onPriceChange }) => {
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>('');
+    const [options, setOptions] = useState<OptionData[]>([]);
+    const [open, setOpen] = useState(false);
+    const [selectedOption, setSelectedOption] = useState<OptionData | null>(null);
+    const [price, setPrice] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -193,7 +186,7 @@ const OptionModal: React.FC<ProductComponentProps & {onPriceChange: (price: numb
     setSelectedOption(option);
     setPrice(option.price);
     onPriceChange(option.price);
-    onOptionSelect(option);
+    // onOptionSelect(option);
     setOpen(true);
 };
 
@@ -201,9 +194,9 @@ const [selectedPrice, setSelectedPrice] = useState<number | null>(null); // Decl
 
 const handleChooseSelection = () => {
     setOpen(false);
-    // Confirm the selected option and specification by passing them to the parent component
-    onOptionSelect(selectedOption);
-    onSpecificationSelect(selectedSpecification);
+    // // Confirm the selected option and specification by passing them to the parent component
+    // onOptionSelect(selectedOption);
+    // onSpecificationSelect(selectedSpecification);
 };
 
   const handleClose = () => {
@@ -274,18 +267,14 @@ const handleChooseSelection = () => {
 
                 </div>
                 <div style={{ marginLeft: 'auto' }}> 
-                  <SpecificationDropdown
+                <SpecificationDropdown
                     productId={productId}
                     optionId={selectedOption.id}
-                    onPriceChange={(price: number) => {
-                      onPriceChange(price);
-                      setSelectedPrice(price); // Update the selected price
-                  }}
+                    onPriceChange={onPriceChange}
                   />
                 </div>
               </div>
             )}
-
           </Box>
         </div>
       </Modal>
@@ -318,19 +307,18 @@ interface ImageData {
   }
   
   interface ProductComponentProps {
-      productId: number;
-      productSlug: string;
-      onPriceChange: (price: number, productId: number) => void;
-      onOptionSelect: (option: OptionData[]) => void; // Modify to handle array of options
-      onSpecificationSelect: (specification: SpecificationData[]) => void; // Modify to handle array of specifications
+    productId: number;
+    onPriceChange: (price: number, productId: number) => void; // Add onPriceChange to the props
   }
   
-  const VariationModal: React.FC<ProductComponentProps & { selectedSpecifications: SpecificationData[], selectedOptions: OptionData[] }> = ({ productId, productSlug, onPriceChange, onOptionSelect, onSpecificationSelect, selectedSpecifications, selectedOptions }) => {
-      const [loading, setLoading] = useState<boolean>(true);
-      const [error, setError] = useState<string>('');
-      const [variations, setVariations] = useState<VariationData[]>([]);
-      const [selectedVariation, setSelectedVariation] = useState<VariationData | null>(null);
-      const [open, setOpen] = useState(false);
+  const VariationModal: React.FC<ProductComponentProps> = ({ productId, onPriceChange }) => {
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>('');
+    const [product, setProduct] = useState<ProductData | null>(null);
+    const [variations, setVariations] = useState<VariationData[]>([]);
+    const [selectedVariation, setSelectedVariation] = useState<VariationData | null>(null);
+    const [open, setOpen] = useState(false);
+    const [price, setPrice] = useState<number | null>(null);
     
       useEffect(() => {
         const fetchData = async () => {
@@ -355,6 +343,8 @@ interface ImageData {
       }, [productId]);
     
       const handlePriceChange = (newPrice: number, productId: number) => {
+        setPrice(newPrice);
+        // Pass both price and productId to the parent component
         onPriceChange(newPrice, productId);
       };
     
@@ -365,9 +355,6 @@ interface ImageData {
   
       const handleChooseSelection = () => {
           setOpen(false);
-          // Confirm the selected variation, options, and specifications by passing them to the parent component
-          onOptionSelect(selectedOptions);
-          onSpecificationSelect(selectedSpecifications);
       };
     
       const handleClose = () => {
@@ -398,8 +385,16 @@ interface ImageData {
             aria-describedby="parent-modal-description"
           >
             <div className=''>
-              <Box sx={{position: 'absolute' as 'absolute', top: '50%', left: '50%', width: '100%', maxWidth: 1000, transform: 'translate(-50%, -50%)', 
-              bgcolor: '#FFD6A5', boxShadow: 24, p: 5 }}>
+              <Box sx={{
+                position: 'absolute' as 'absolute', 
+                top: '50%', 
+                left: '50%',
+                width: '100%', 
+                maxWidth: 1000, 
+                transform: 'translate(-50%, -50%)', 
+                bgcolor: '#FFD6A5', 
+                boxShadow: 24,
+                p: 5 }}>
                 <div className=''>
                   <h1 className="font-semibold" id="parent-modal-title">{selectedVariation?.name}</h1>
                   <div id="parent-modal-description">
@@ -407,20 +402,33 @@ interface ImageData {
                   </div>
                 </div>
                 <div>
-                  {selectedVariation && (
-                    <OptionModal 
-                        productId={productId} 
-                        variationId={selectedVariation.id} 
-                        onPriceChange={(price: number) => {
-                        handlePriceChange(price, productId);
-                    }} 
-                    onOptionSelect={onOptionSelect} // Pass onOptionSelect prop to OptionModal
-                    onSpecificationSelect={onSpecificationSelect} // Pass onSpecificationSelect prop to OptionModal
-                    selectedSpecification={selectedSpecifications} // Pass selectedSpecifications as prop
-                    selectedOption={selectedOptions} // Pass selectedOptions as prop
+                {selectedVariation && (
+              <OptionModal 
+                productId={productId} 
+                variationId={selectedVariation.id} 
+                onPriceChange={handlePriceChange} // Pass function to update price
                     />
-                  )}
+                    )}
                 </div>
+                
+                    <div>
+
+                    {/* Display the product summary */}
+
+                    <p>Options:</p>
+                    <ul>
+                        {/* {selectedOptions.map((option, index) => (
+                            <li key={index}>{option.name}</li>))} */}
+                    </ul>
+                    <p>Specifications:</p>
+                    <ul>
+                        {/* {selectedSpecifications.map((specification, index) => (
+                            <li key={index}>{specification.name}</li>
+                        ))} */}
+                    </ul>
+                    {price !== null && <p>Price: ${price}</p>}
+                    </div>
+
                 <div className="mt-auto">
                   <button className='bg-primary-purple text-white font-bold py-3 px-16 rounded-xl h-15' onClick={handleChooseSelection}>Confirm Selection</button>
                 </div>
@@ -435,6 +443,29 @@ interface ImageData {
 
 
 
+
+
+
+
+//     <div>
+//     {/* Display selected options and specifications */}
+//     <p>Selected Options:</p>
+//     <ul>
+//         {selectedOptions.map((option, index) => (
+//             <li key={index}>{option.name}</li>
+//         ))}
+//     </ul>
+//     <p>Selected Specifications:</p>
+//     <ul>
+//         {selectedSpecifications.map((specification, index) => (
+//             <li key={index}>{specification.name}</li>
+//         ))}
+//     </ul>
+//     <div>
+//       {/* Display price if available */}
+//       {price !== null && <p>Price: ${price}</p>}
+//       </div>
+//   </div>
 
 
 

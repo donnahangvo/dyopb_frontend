@@ -1,4 +1,5 @@
 import Background from '../assets/images/DYOPBHero.png'
+import IsFeatured from '../components/IsFeatured'
 // import Logo from '../assets/images/AELogo.png'
 
 function Home() {
@@ -11,8 +12,9 @@ function Home() {
     <div>
     <div className="footer-logo-container">
           <img src={Background} alt="Design Your Own Plant Baby" />
-        </div>
+      </div>
     </div>
+    <IsFeatured />
     </div>
   )
 }
