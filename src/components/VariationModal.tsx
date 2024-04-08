@@ -75,48 +75,47 @@ const SpecificationDropdown: React.FC<ProductComponentProps &
         onPriceChange(specification.price);
         onSpecificationSelect(specification);
     };
-    
+  
 
-    return (
-        <div className="w-72 font-medium h-100">
-            <div className={`bg-white w-full flex items-center justify-between rounded ${!selectedSpecification && "bg-secondary-blue text-gray-700"}`}>
-            {selectedSpecification ? (
-                      <div>
-                          {selectedSpecification.name.length > 25 ? `${selectedSpecification.name.substring(0, 25)}...` : selectedSpecification.name}
-                          {selectedSpecification.image && selectedSpecification.image.length > 0 && (
-                              <img src={`${apiURL}/${selectedSpecification.image}`} alt={selectedSpecification.name} className='object-contain rounded-md mr-2' />
-                          )}
-                      </div>
-                  ) : (
+  return (
+      <div className="w-72 font-medium h-100">
+          <div className={`bg-white w-full flex items-center justify-between rounded ${!selectedSpecification && "bg-secondary-blue text-gray-700"}`}>
+              {selectedSpecification ? (
+                  <div>
+                      {selectedSpecification.name.length > 25 ? `${selectedSpecification.name.substring(0, 25)}...` : selectedSpecification.name}
+                      {selectedSpecification.image && selectedSpecification.image.length > 0 && (
+                          <img src={`${apiURL}/${selectedSpecification.image}`} alt={selectedSpecification.name} className='object-contain rounded-md mr-2' />
+                      )}
+                  </div>
+              ) : (
                       loading ? 'Loading...' : error ? error : 'Choose From Available Options'
                   )}
-            </div>
-            <ul className={`bg-white mt-1 overflow-y-auto ${isOpen ? "max-h-60" : "max-h-0"}`}>
-                <div className="flex items-center px-2 sticky top-0 bg-white">
-                </div>
-                {specifications.map((specification) => (
-                    <li
-                        key={specification.id}
-                        className={` ${specification.name.toLowerCase() === selectedSpecification?.name.toLowerCase() && "bg-secondary-blue text-black"}`}
-                        onClick={() => {
-                            if (specification.name.toLowerCase() !== selectedSpecification?.name.toLowerCase()) {
-                                setSelectedSpecification(specification);
-                                handleSpecificationSelect(specification);
-                                onPriceChange(specification.price);
-                                setInputValue("");
-                                setIsOpen(true);
-                            }
-                        }}
-                    >
-                        {specification.name}
-                        {specification.image && specification.image.length > 0 && (
-                            <img src={`${apiURL}/${specification.image}`} alt={specification.name} className='w-10 h-10 object-contain rounded-md mr-2' />
-                        )}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+          </div>
+          <ul className={`bg-white mt-1 overflow-y-auto ${isOpen ? "max-h-60" : "max-h-0"}`}>
+              {/* Check this empty div */}
+              <div className="flex items-center px-2 sticky top-0 bg-white">
+                  {/* Add content here if needed */}
+              </div>
+              {specifications.map((specification) => (
+                  <li
+                      key={specification.id}
+                      className={` ${specification.name.toLowerCase() === selectedSpecification?.name.toLowerCase() && "bg-secondary-blue text-black"}`}
+                      onClick={() => {
+                          if (specification.name.toLowerCase() !== selectedSpecification?.name.toLowerCase()) {
+                              handleSpecificationSelect(specification);
+                              setInputValue("");
+                              setIsOpen(false); // close dropdown after selection
+                          }
+                      }}>
+                      {specification.name} {/* Corrected */}
+                      {specification.image && specification.image.length > 0 && (
+                          <img src={`${apiURL}/${specification.image}`} alt={specification.name} className='w-10 h-10 object-contain rounded-md mr-2' />
+                      )}
+                  </li>
+              ))}
+          </ul>
+      </div>
+  );
 };
 
 
