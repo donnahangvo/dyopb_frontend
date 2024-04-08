@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import { server_calls, apiURL } from "../api/server";
 import React, { useState, useEffect } from 'react';
 import BackendText from './BackendText';
+import SummaryTable from './SummaryTable';
 
 
 // Specification Dropdown Menu
@@ -190,13 +191,10 @@ const OptionModal: React.FC<ProductComponentProps & { onPriceChange: (price: num
     setOpen(true);
 };
 
-const [selectedPrice, setSelectedPrice] = useState<number | null>(null); // Declare state variables outside the function
+const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
 
 const handleChooseSelection = () => {
     setOpen(false);
-    // // Confirm the selected option and specification by passing them to the parent component
-    // onOptionSelect(selectedOption);
-    // onSpecificationSelect(selectedSpecification);
 };
 
   const handleClose = () => {
@@ -344,7 +342,6 @@ interface ImageData {
     
       const handlePriceChange = (newPrice: number, productId: number) => {
         setPrice(newPrice);
-        // Pass both price and productId to the parent component
         onPriceChange(newPrice, productId);
       };
     
@@ -413,19 +410,8 @@ interface ImageData {
                 
                     <div>
 
-                    {/* Display the product summary */}
+                    <SummaryTable />
 
-                    <p>Options:</p>
-                    <ul>
-                        {/* {selectedOptions.map((option, index) => (
-                            <li key={index}>{option.name}</li>))} */}
-                    </ul>
-                    <p>Specifications:</p>
-                    <ul>
-                        {/* {selectedSpecifications.map((specification, index) => (
-                            <li key={index}>{specification.name}</li>
-                        ))} */}
-                    </ul>
                     {price !== null && <p>Price: ${price}</p>}
                     </div>
 

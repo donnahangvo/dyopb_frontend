@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { server_calls, apiURL } from "../api/server";
 import VariationModal from './VariationModal';
 import BackendText from './BackendText';
-// import AddtoCart from './AddtoCart';
+import SummaryTable from './SummaryTable';
 
 interface ImageData {
     id: number;
@@ -85,6 +85,8 @@ const handleImageClick = (index: number) => {
                             ))}
                         </div>
                     </div>
+
+
                     <div className='flex flex-col gap-10 lg:w-3/4 p-10'>
 
                         <div>
@@ -106,23 +108,16 @@ const handleImageClick = (index: number) => {
 
 
 
-                        <div>
-
+                        <div className=''>
                             {/* Display the product summary */}
                             <h3>Your Product Summary:</h3>
-                                <p>Options:</p>
-                             <ul>
-                                  {/* {selectedOptions.map((option, index) => (
-                                       <li key={index}>{option.name}</li>))} */}
-                             </ul>
-                             <p>Specifications:</p>
-                               <ul>
-                                   {/* {selectedSpecifications.map((specification, index) => (
-                                      <li key={index}>{specification.name}</li>
-                                  ))} */}
-                              </ul>
-                         <p>Price:</p> 
-                        <h6 className='text-2xl font-semibold'>$ {productPrice !== null ? productPrice : product.price}</h6>
+                            <div className='max-w-lg'> {/* Adjust max-w-lg to your desired width */}
+                                <SummaryTable />
+                            </div>
+
+                            <p>Price:</p> 
+                            <h6 className='text-2xl font-semibold'>$ {productPrice !== null ? productPrice : product.price}</h6>
+                            
                         </div>
 
 
