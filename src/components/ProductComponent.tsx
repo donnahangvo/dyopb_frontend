@@ -3,6 +3,7 @@ import { server_calls, apiURL } from "../api/server";
 import VariationModal from './VariationModal';
 import BackendText from './BackendText';
 import SummaryTable from './SummaryTable';
+import { useProduct } from '../context/ProductContext';
 
 interface ImageData {
     id: number;
@@ -29,6 +30,7 @@ interface ProductComponentProps {
 }
 
 const ProductComponent: React.FC<ProductComponentProps> = ({ productSlug }) => {
+    const { selectedProduct: contextSelectedProduct, setSelectedProduct } = useProduct();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
     const [product, setProduct] = useState<ProductData | null>(null);
@@ -53,17 +55,8 @@ const ProductComponent: React.FC<ProductComponentProps> = ({ productSlug }) => {
         };
 
         fetchData();
-    }, [productSlug]);
+    }, [productSlug, setSelectedProduct]);
 
-
-const [productPrice, setProductPrice] = useState<number | null>(null);
-
-    // Callback function to receive price from VariationModal
-const handleProductPriceChange = (newPrice: number, productId: number) => {
-    if (productId === product.id) {
-      setProductPrice(newPrice);
-    }
-  };
 
 const handleImageClick = (index: number) => {
         setActiveImgIndex(index);
@@ -98,12 +91,12 @@ const handleImageClick = (index: number) => {
                         </div>
 
                         <div>
-                            <p className='text-gray-700'>
+                            <div className='text-gray-700'>
                                 <BackendText description={product.description} />
-                            </p>
+                            </div>
                         </div>
                         
-                        <VariationModal productId={product.id} onPriceChange={handleProductPriceChange} />
+                        <VariationModal productId={product.id} />
                         {/* Display the product price */}
 
 
@@ -116,7 +109,9 @@ const handleImageClick = (index: number) => {
                             </div>
 
                             <p>Price:</p> 
-                            <h6 className='text-2xl font-semibold'>$ {productPrice !== null ? productPrice : product.price}</h6>
+                            <h6 className='text-2xl font-semibold'>
+                                {/* {productPrice !== null ? `$ ${productPrice}` : 'Price not available'} */}
+                            </h6>
                             
                         </div>
 

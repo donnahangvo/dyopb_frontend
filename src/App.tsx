@@ -4,11 +4,13 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Category from './pages/Category';
 import Product from './pages/Product';
+import { ProductProvider } from './context/ProductContext';
 
 function App() {
   return (
     <HashRouter>
       <Navbar />
+      <ProductProvider>
       <Routes>
         <Route path=":categorySlug/" element={<Category />} />
         <Route path="/product/:productSlug/" element={<Product />} />
@@ -21,6 +23,7 @@ function App() {
           />
         ))}
       </Routes>
+      </ProductProvider>
       <Footer />
     </HashRouter>
   );
