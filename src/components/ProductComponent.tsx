@@ -30,7 +30,7 @@ interface ProductComponentProps {
 }
 
 const ProductComponent: React.FC<ProductComponentProps> = ({ productSlug }) => {
-    const { selectedProduct: contextSelectedProduct, setSelectedProduct } = useProduct();
+    const { selectedProduct, setSelectedProduct } = useProduct();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
     const [product, setProduct] = useState<ProductData | null>(null);
@@ -105,7 +105,7 @@ const handleImageClick = (index: number) => {
                             {/* Display the product summary */}
                             <h3>Your Product Summary:</h3>
                             <div className='max-w-lg'> {/* Adjust max-w-lg to your desired width */}
-                                <SummaryTable />
+                                {/* <SummaryTable selectedProduct={selectedProduct} selectedVariation={null} selectedOption={null} selectedSpecification={null} /> */}
                             </div>
 
                             <p>Price:</p> 

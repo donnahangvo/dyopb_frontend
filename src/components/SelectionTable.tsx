@@ -29,7 +29,7 @@ interface SpecificationData {
     image: ImageData[];
     thumbnail: ImageData[];
     ordering: number;
-  }
+}
 
 interface VariationData {
     id: number;
@@ -55,9 +55,9 @@ interface OptionData {
     image: ImageData[];
     thumbnail: ImageData[];
     ordering: number;
-  }
-  
-  interface ProductData {
+}
+
+interface ProductData {
     id: number;
     category: number;
     name: string;
@@ -67,18 +67,17 @@ interface OptionData {
     price: string;
     is_featured: boolean;
     images: ImageData[];
-  }
-  
+}
 
 interface SummaryTableProps {
-    selectedProduct: ProductData | null; 
-    selectedVariation: VariationData | null; 
+    selectedProduct: ProductData | null;
+    selectedVariation: VariationData | null;
     selectedOption: OptionData | null;
     selectedSpecification: SpecificationData | null;
 }
 
-const SummaryTable: React.FC<SummaryTableProps> = ({ }) => {
-    const { selectedProduct, selectedVariation, selectedOption, selectedSpecification } = useProduct();
+const SelectionTable: React.FC<SummaryTableProps> = ({ }) => {
+    const { selectedSpecification, selectedVariation } = useProduct();
 
     return (
         <div className='pt-5 pb-5'>
@@ -110,11 +109,11 @@ const SummaryTable: React.FC<SummaryTableProps> = ({ }) => {
     );
 };
 
-export default SummaryTable;
+export default SelectionTable;
 
 
 
-// import React, { useEffect, useState } from 'react';
+// import React from 'react';
 // import Table from '@mui/material/Table';
 // import TableBody from '@mui/material/TableBody';
 // import TableCell from '@mui/material/TableCell';
@@ -129,9 +128,9 @@ export default SummaryTable;
 //     product: number;
 //     image: string;
 //     thumbnail: string;
-//   }
-  
-//   interface SpecificationData {
+// }
+
+// interface SpecificationData {
 //     id: number;
 //     product: number;
 //     option: number;
@@ -146,8 +145,20 @@ export default SummaryTable;
 //     thumbnail: ImageData[];
 //     ordering: number;
 //   }
-  
-//   interface OptionData {
+
+// interface VariationData {
+//     id: number;
+//     product: number;
+//     name: string;
+//     slug: string;
+//     variation_sku: string;
+//     description: string;
+//     image: ImageData[];
+//     thumbnail: ImageData[];
+//     ordering: number;
+// }
+
+// interface OptionData {
 //     id: number;
 //     product: number;
 //     variation: number;
@@ -156,18 +167,6 @@ export default SummaryTable;
 //     option_sku: string;
 //     description: string;
 //     price: number;
-//     image: ImageData[];
-//     thumbnail: ImageData[];
-//     ordering: number;
-//   }
-  
-//   interface VariationData {
-//     id: number;
-//     product: number;
-//     name: string;
-//     slug: string;
-//     variation_sku: string;
-//     description: string;
 //     image: ImageData[];
 //     thumbnail: ImageData[];
 //     ordering: number;
@@ -184,12 +183,17 @@ export default SummaryTable;
 //     is_featured: boolean;
 //     images: ImageData[];
 //   }
-//   interface SummaryTableProps {
-//     variation: VariationData | null; // Accepts VariationData or null
+  
+
+// interface SummaryTableProps {
+//     selectedProduct: ProductData | null; 
+//     selectedVariation: VariationData | null; 
+//     selectedOption: OptionData | null;
+//     selectedSpecification: SpecificationData | null;
 // }
 
-// const SummaryTable: React.FC<SummaryTableProps> = ({ variation }) => {
-//     const { selectedSpecification } = useProduct();
+// const SelectionTable: React.FC<SummaryTableProps> = ({ }) => {
+//     const { selectedProduct, selectedVariation, selectedOption, selectedSpecification } = useProduct();
 
 //     return (
 //         <div className='pt-5 pb-5'>
@@ -203,58 +207,16 @@ export default SummaryTable;
 //                         </TableRow>
 //                     </TableHead>
 //                     <TableBody>
-//                         {selectedSpecification && (
-//                             <TableRow>
-//                                 <TableCell>{variation ? variation.name : '-'}</TableCell>
-//                                 <TableCell>{selectedSpecification.name}</TableCell>
-//                                 <TableCell>{selectedSpecification.specification_sku}</TableCell>
-//                             </TableRow>
-//                         )}
-//                     </TableBody>
-//                 </Table>
-//             </TableContainer>
-//         </div>
-//     );
-// };
-
-// export default SummaryTable;
-
-
-
-
-
-
-// import React from 'react';
-// import Table from '@mui/material/Table';
-// import TableBody from '@mui/material/TableBody';
-// import TableCell from '@mui/material/TableCell';
-// import TableContainer from '@mui/material/TableContainer';
-// import TableHead from '@mui/material/TableHead';
-// import TableRow from '@mui/material/TableRow';
-// import Paper from '@mui/material/Paper';
-// import { useProduct } from '../context/ProductContext';
-
-// const SummaryTable: React.FC = () => {
-//     const { selectedSpecification, selectedVariation } = useProduct();
-
-//     return (
-//         <div className='pt-5 pb-5'>
-//             <TableContainer component={Paper}>
-//                 <Table sx={{ minWidth: 500 }} aria-label="simple table">
-//                     <TableHead>
-//                         <TableRow>
-//                             <TableCell>Variation</TableCell>
-//                             <TableCell>Name</TableCell>
-//                             <TableCell>SKU</TableCell>
-//                         </TableRow>
-//                     </TableHead>
-//                     <TableBody>
-//                         {selectedSpecification && selectedVariation && (
+//                         {selectedSpecification && selectedVariation ? (
 //                             <TableRow>
 //                                 <TableCell>{selectedVariation.name}</TableCell>
 //                                 <TableCell>{selectedSpecification.name}</TableCell>
 //                                 <TableCell>{selectedSpecification.specification_sku}</TableCell>
 //                             </TableRow>
+//                         ) : (
+//                             <TableRow>
+//                                 <TableCell colSpan={3}>No choices selected yet.</TableCell>
+//                             </TableRow>
 //                         )}
 //                     </TableBody>
 //                 </Table>
@@ -263,11 +225,4 @@ export default SummaryTable;
 //     );
 // };
 
-// export default SummaryTable;
-
-
-
-
-
-
-
+// export default SelectionTable;

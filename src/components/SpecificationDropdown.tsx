@@ -1,6 +1,5 @@
 import { server_calls, apiURL } from "../api/server";
 import React, { useState, useEffect } from 'react';
-import BackendText from './BackendText';
 import { useProduct } from '../context/ProductContext';
 
 interface ProductComponentProps {
@@ -39,7 +38,8 @@ const SpecificationDropdown: React.FC<ProductComponentProps & { selectedSpecific
     selectedSpecificationProp,
     setSelectedSpecificationProp
 }) => {
-    const { selectedSpecification: contextSelectedSpecification, setSpecification } = useProduct();
+    // const { selectedSpecification: contextSelectedSpecification, setSpecification } = useProduct();
+    const { selectedOption, selectedSpecification } = useProduct();
     const [isOpen, setIsOpen] = useState(true);
     const [specifications, setSpecifications] = useState<SpecificationData[]>([]);
     const [inputValue, setInputValue] = useState("");
@@ -69,35 +69,58 @@ const SpecificationDropdown: React.FC<ProductComponentProps & { selectedSpecific
         fetchData();
     }, [productId, optionId]);
 
-    // Fetch individual specification when selected
-const fetchIndividualSpecification = async (specification: SpecificationData) => {
-    try {
-        const url = `specification/${productId}/${optionId}/${specification.id}`;
-        const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
 
-        // console.log(specificationData)
+    const fetchIndividualSpecification = async (specification: SpecificationData) => {
+        try {
+            if (selectedOption?.id === optionId) {
+                const url = `specification/${productId}/${optionId}/${specification.id}`;
+                const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
+                setSelectedSpecificationProp(specificationData);
+            } else {
+                setLocalSelectedSpecification(specification); // Set local state
+                setSelectedSpecificationProp(specification);
+            }
+        } catch (error) {
+            setError(error.message || 'An error occurred while fetching individual specification');
+        }
+    };
 
-        setSelectedSpecificationProp(specificationData);
-    } catch (error) {
-        setError(error.message || 'An error occurred while fetching individual specification');
-    }
-};
+//     // Fetch individual specification when selected
+// const fetchIndividualSpecification = async (specification: SpecificationData) => {
+//     try {
+//         const url = `specification/${productId}/${optionId}/${specification.id}`;
+//         const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
+
+//         // console.log(specificationData)
+
+//         setSelectedSpecificationProp(specificationData);
+//     } catch (error) {
+//         setError(error.message || 'An error occurred while fetching individual specification');
+//     }
+// };
+
+// const handleSpecificationSelect = (specification: SpecificationData) => {
+//     if (fetchIndividualSpecification) {
+//         fetchIndividualSpecification(specification); // Fetch individual specification
+//     } else {
+//         setLocalSelectedSpecification(specification); // Set local state
+//         setSelectedSpecificationProp(specification); 
+//         onSpecificationSelect(specification);
+//     }
+// };
+
 
 const handleSpecificationSelect = (specification: SpecificationData) => {
-    if (fetchIndividualSpecification) {
-        fetchIndividualSpecification(specification); // Fetch individual specification
-    } else {
-        setLocalSelectedSpecification(specification); // Set local state
-        setSelectedSpecificationProp(specification); 
-        // setIsOpen(false);
-        onSpecificationSelect(specification);
-    }
+    setSelectedSpecificationProp(specification); // Update the selected specification in the context
+    onSpecificationSelect(specification); // Notify the parent component about the selected specification
 };
 
 return (
     <div className="w-72 font-medium h-100">
     <div className={`bg-white w-full flex items-center justify-between rounded ${!selectedSpecificationProp && "bg-secondary-blue text-gray-700"}`}>
         {selectedSpecificationProp ? (
+
+            
             <div>
                 {selectedSpecificationProp.name.length > 25 ? `${selectedSpecificationProp.name.substring(0, 25)}...` : selectedSpecificationProp.name}
                 {selectedSpecificationProp.image && selectedSpecificationProp.image.length > 0 && (
@@ -121,7 +144,6 @@ return (
                           if (specification.name.toLowerCase() !== selectedSpecificationProp?.name.toLowerCase()) {
                               handleSpecificationSelect(specification);
                               setInputValue("");
-                            //   setIsOpen(false); // close dropdown after selection
                           }
                       }}>
                     {specification.name}
@@ -138,6 +160,43 @@ return (
 export default SpecificationDropdown;
 
 
-
-
-
+// return (
+//     <div className="w-72 font-medium h-100">
+//     <div className={`bg-white w-full flex items-center justify-between rounded ${!selectedSpecificationProp && "bg-secondary-blue text-gray-700"}`}>
+//         {selectedSpecificationProp ? (
+//             <div>
+//                 {selectedSpecificationProp.name.length > 25 ? `${selectedSpecificationProp.name.substring(0, 25)}...` : selectedSpecificationProp.name}
+//                 {selectedSpecificationProp.image && selectedSpecificationProp.image.length > 0 && (
+//                     <img src={`${apiURL}/${selectedSpecificationProp.image}`} alt={selectedSpecificationProp.name} className='object-contain rounded-md mr-2' />
+//                 )}
+//             </div>
+//             ) : (
+//                 loading ? 'Loading...' : error ? error : 'Choose From Available Options'
+//             )}
+//         </div>
+//                 <ul className={`bg-white mt-1 overflow-y-auto ${isOpen ? "max-h-60" : "max-h-0"}`}>
+//               {/* Check this empty div */}
+//               <div className="flex items-center px-2 sticky top-0 bg-white">
+//                   {/* Add content here if needed */}
+//               </div>
+//               {specifications.map((specification) => (
+//                   <li
+//                       key={specification.id}
+//                       className={` ${specification.name.toLowerCase() === selectedSpecificationProp?.name.toLowerCase() && "bg-secondary-blue text-black"}`}
+//                       onClick={() => {
+//                           if (specification.name.toLowerCase() !== selectedSpecificationProp?.name.toLowerCase()) {
+//                               handleSpecificationSelect(specification);
+//                               setInputValue("");
+//                             //   setIsOpen(false); // close dropdown after selection
+//                           }
+//                       }}>
+//                     {specification.name}
+//                     {specification.image && specification.image.length > 0 && (
+//                         <img src={`${apiURL}/${specification.image}`} alt={specification.name} className='w-10 h-10 object-contain rounded-md mr-2' />
+//                     )}
+//                 </li>
+//             ))}
+//         </ul>
+//     </div>
+// );
+// };
