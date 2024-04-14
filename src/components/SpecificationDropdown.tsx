@@ -39,7 +39,7 @@ const SpecificationDropdown: React.FC<ProductComponentProps & { selectedSpecific
     setSelectedSpecificationProp
 }) => {
     // const { selectedSpecification: contextSelectedSpecification, setSpecification } = useProduct();
-    const { selectedOption, selectedSpecification } = useProduct();
+    const { selectedOption, selectedSpecification, setSelectedSpecification } = useProduct();
     const [isOpen, setIsOpen] = useState(true);
     const [specifications, setSpecifications] = useState<SpecificationData[]>([]);
     const [inputValue, setInputValue] = useState("");
@@ -85,33 +85,10 @@ const SpecificationDropdown: React.FC<ProductComponentProps & { selectedSpecific
         }
     };
 
-//     // Fetch individual specification when selected
-// const fetchIndividualSpecification = async (specification: SpecificationData) => {
-//     try {
-//         const url = `specification/${productId}/${optionId}/${specification.id}`;
-//         const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
-
-//         // console.log(specificationData)
-
-//         setSelectedSpecificationProp(specificationData);
-//     } catch (error) {
-//         setError(error.message || 'An error occurred while fetching individual specification');
-//     }
-// };
-
-// const handleSpecificationSelect = (specification: SpecificationData) => {
-//     if (fetchIndividualSpecification) {
-//         fetchIndividualSpecification(specification); // Fetch individual specification
-//     } else {
-//         setLocalSelectedSpecification(specification); // Set local state
-//         setSelectedSpecificationProp(specification); 
-//         onSpecificationSelect(specification);
-//     }
-// };
-
 
 const handleSpecificationSelect = (specification: SpecificationData) => {
     setSelectedSpecificationProp(specification); // Update the selected specification in the context
+    setSelectedSpecification(specification); // Update context with selected specification
     onSpecificationSelect(specification); // Notify the parent component about the selected specification
 };
 
@@ -159,6 +136,31 @@ return (
 
 export default SpecificationDropdown;
 
+
+
+//     // Fetch individual specification when selected
+// const fetchIndividualSpecification = async (specification: SpecificationData) => {
+//     try {
+//         const url = `specification/${productId}/${optionId}/${specification.id}`;
+//         const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
+
+//         // console.log(specificationData)
+
+//         setSelectedSpecificationProp(specificationData);
+//     } catch (error) {
+//         setError(error.message || 'An error occurred while fetching individual specification');
+//     }
+// };
+
+// const handleSpecificationSelect = (specification: SpecificationData) => {
+//     if (fetchIndividualSpecification) {
+//         fetchIndividualSpecification(specification); // Fetch individual specification
+//     } else {
+//         setLocalSelectedSpecification(specification); // Set local state
+//         setSelectedSpecificationProp(specification); 
+//         onSpecificationSelect(specification);
+//     }
+// };
 
 // return (
 //     <div className="w-72 font-medium h-100">

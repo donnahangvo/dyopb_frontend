@@ -1,4 +1,4 @@
-// // OptionModal.tsx
+// // // OptionModal.tsx
 // import Box from '@mui/material/Box';
 // import Modal from '@mui/material/Modal';
 // import Button from '@mui/material/Button';
@@ -8,7 +8,6 @@
 // import SelectionTable from './SelectionTable';
 // import { server_calls, apiURL } from "../api/server";
 // import { useProduct } from '../context/ProductContext';
-
 
 // // Option Modal
 // interface ImageData {
@@ -51,9 +50,6 @@
 // interface OptionModalProps {
 //   productId: number;
 //   variationId: number;
-//   selectedOption: number;
-//   setSelectedSpecification: number;
-//   onOptionSelect: number;
 // }
 
 // const OptionModal: React.FC<OptionModalProps> = ({ productId, variationId, selectedOption, setSelectedSpecification, onOptionSelect }) => {
@@ -84,14 +80,15 @@
 //     }, [productId, variationId]);
 
 //     useEffect(() => {
-//       if (selectedOption) {
-//         setIsOpen(true);
-//       }
-//     }, [selectedOption]);
+//         if (selectedOption) {
+//           setIsOpen(true);
+//         }
+//       }, [selectedOption]);
 
 //   const handleOptionSelect = (option: OptionData) => {
 //     setSelectedOption(option);
 //     onOptionSelect(option); // Pass the selected option to the parent component
+//     setIsOpen(true); // Open the modal when an option is selected
 //   };
 
 //   const handleChooseSelection = async () => {
@@ -289,10 +286,15 @@ const OptionModal: React.FC<OptionModalProps> = ({ productId, variationId }) => 
 
   const handleChooseSelection = async () => {
     if (selectedOption && selectedSpecification && selectedSpecification.id !== void 0) {
+
+        console.log("Selected Option", selectedOption)
+        console.log("Selected Specification", selectedSpecification)
+        console.log("Selected Specification ID", selectedSpecification.id)
         try {
             const url = `specification/${productId}/${selectedOption.id}/${selectedSpecification.id}`;
             const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
             setSelectedSpecification(specificationData);
+            setSelectedOption(selectedOption);
             setIsOpen(false); // Close the modal after updating the specification
             setSelectedSpecification(null); // Clear the selected specification state
         } catch (error) {
@@ -398,6 +400,10 @@ export default OptionModal;
 
 
 
+
+// function setSpecId(id: number) {
+//     throw new Error('Function not implemented.');
+// }
 // import Box from '@mui/material/Box';
 // import Modal from '@mui/material/Modal';
 // import Button from '@mui/material/Button';
