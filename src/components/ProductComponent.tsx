@@ -24,13 +24,27 @@ interface ProductData {
     images: ImageData[];
 }
 
+interface OptionData {
+    id: number;
+    product: number;
+    variation: number;
+    name: string;
+    slug: string;
+    option_sku: string;
+    description: string;
+    price: number;
+    image: ImageData[]; // Array of ImageData
+    thumbnail: ImageData[]; // Array of ImageData
+    ordering: number;
+  }
+
 interface ProductComponentProps {
     productId: number;
     productSlug: string;
 }
 
 const ProductComponent: React.FC<ProductComponentProps> = ({ productSlug }) => {
-    const { selectedProduct, setSelectedProduct } = useProduct();
+    const { selectedProduct, setSelectedProduct, selectedOptionSpecifications, selectedOption } = useProduct();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
     const [product, setProduct] = useState<ProductData | null>(null);
@@ -44,6 +58,7 @@ const ProductComponent: React.FC<ProductComponentProps> = ({ productSlug }) => {
 
                 if (productData) {
                     setProduct(productData);
+                    setSelectedProduct(productData);
                 } else {
                     setError('Product not found');
                 }
@@ -105,6 +120,7 @@ const handleImageClick = (index: number) => {
                             {/* Display the product summary */}
                             <h3>Your Product Summary:</h3>
                             <div className='max-w-lg'> {/* Adjust max-w-lg to your desired width */}
+                            <SummaryTable selectedProduct={selectedProduct} selectedOption={selectedOption} selectedOptionSpecifications={selectedOptionSpecifications} />
                                 {/* <SummaryTable selectedProduct={selectedProduct} selectedVariation={null} selectedOption={null} selectedSpecification={null} /> */}
                             </div>
 

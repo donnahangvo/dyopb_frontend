@@ -23,7 +23,7 @@ const Footer = () => {
 
                     <div className='footer-section-one'>
                         <Link to='/'><img className="object-fit h-20" src={Logo} alt="Adorkable Emporium" /></Link>
-                        <Newsletter />
+                        {/* <Newsletter /> */}
                     </div>
 
             

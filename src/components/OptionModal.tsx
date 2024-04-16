@@ -253,7 +253,7 @@ interface OptionModalProps {
 }
 
 const OptionModal: React.FC<OptionModalProps> = ({ productId, variationId }) => {
-    const { selectedOption, setSelectedSpecification, selectedSpecification, setSelectedOption } = useProduct(); // Destructure selectedOption and setSelectedSpecification from the useProduct hook
+    const { selectedOption, setSelectedSpecification, selectedSpecification, setSelectedOption, selectedOptionSpecifications, setSelectedOptionSpecifications } = useProduct(); // Destructure selectedOption and setSelectedSpecification from the useProduct hook
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
     const [options, setOptions] = useState<OptionData[]>([]);
@@ -284,24 +284,56 @@ const OptionModal: React.FC<OptionModalProps> = ({ productId, variationId }) => 
     setIsOpen(true); // Open the modal when an option is selected
   };
 
-  const handleChooseSelection = async () => {
-    if (selectedOption && selectedSpecification && selectedSpecification.id !== void 0) {
+//   const handleChooseSelection = async () => {
+//     if (selectedOption && selectedSpecification && selectedSpecification.id !== void 0) {
 
-        console.log("Selected Option", selectedOption)
-        console.log("Selected Specification", selectedSpecification)
-        console.log("Selected Specification ID", selectedSpecification.id)
-        try {
-            const url = `specification/${productId}/${selectedOption.id}/${selectedSpecification.id}`;
-            const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
-            setSelectedSpecification(specificationData);
-            setSelectedOption(selectedOption);
-            setIsOpen(false); // Close the modal after updating the specification
-            setSelectedSpecification(null); // Clear the selected specification state
-        } catch (error) {
-            setError(error.message || 'An error occurred while fetching specification data');
-        }
+//         console.log("Selected Option", selectedOption)
+//         console.log("Selected Specification", selectedSpecification)
+//         console.log("Selected Specification ID", selectedSpecification.id)
+//         try {
+//             const url = `specification/${productId}/${selectedOption.id}/${selectedSpecification.id}`;
+//             const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
+//             setSelectedSpecification(specificationData);
+//             setSelectedOption(selectedOption);
+//             setIsOpen(false); // Close the modal after updating the specification
+//             setSelectedSpecification(null); // Clear the selected specification state
+            
+//         } catch (error) {
+//             setError(error.message || 'An error occurred while fetching specification data');
+//         }
+//     }
+// };
+
+const handleChooseSelection = async () => {
+    if (selectedOption && selectedSpecification && selectedSpecification.id !== void 0) {
+      try {
+        const url = `specification/${productId}/${selectedOption.id}/${selectedSpecification.id}`;
+        
+        // Fetch specification data
+        const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
+  
+        // Update selected specification and option
+        setSelectedSpecification(specificationData);
+        setSelectedOption(selectedOption);
+  
+        // Close the modal after updating the specification
+        setIsOpen(false);
+  
+        // Clear the selected specification state
+        setSelectedSpecification(null);
+  
+        // Store specifications for the selected option
+        setSelectedOptionSpecifications(prevState => ({
+         ...prevState,
+        [selectedOption.id]: [specificationData] // Store specification data as an array
+         }));
+        
+      } catch (error) {
+        setError(error.message || 'An error occurred while fetching specification data');
+      }
     }
-};
+  };
+
 
 const handleClose = () => {
     setIsOpen(false); // Close the modal when the close button is clicked

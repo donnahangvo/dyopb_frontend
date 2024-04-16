@@ -84,6 +84,7 @@ const VariationModal: React.FC<ProductComponentProps> = ({ productId }) => {
   const [selectedVariation, setSelectedVariationState] = useState<VariationData | null>(null); 
   const [open, setOpen] = useState(false);
   const [specId, setSpecId] = useState<number | null>(null); // State variable to hold the specification_id
+  const [selectedVariations, setSelectedVariations] = useState<VariationData[]>([]); // Define selectedVariations state variable
   
   useEffect(() => {
     const fetchData = async () => {
@@ -112,22 +113,25 @@ const VariationModal: React.FC<ProductComponentProps> = ({ productId }) => {
     setOpen(true);
     setSelectedVariationState(variation); // Update the selected variation in the context
   };
+  
 
   const handleChooseSelection = (variation: VariationData) => {
-    setSelectedVariation(variation); // Directly set the new variation
-  
-    if (selectedVariation) {
-      // Here, you can set the selected variation into the table or take any other action
-      console.log("Selected Variation:", selectedVariation);
+    // Create a copy of the current selected variations array
+    const updatedSelectedVariations: VariationData[] = [...selectedVariations]; // Explicitly define the type as VariationData[]
+    
+    // Check if the selected variation is already in the array
+    const index = updatedSelectedVariations.findIndex(v => v.id === variation.id);
+    
+    // If the selected variation is not already in the array, add it
+    if (index === -1) {
+      updatedSelectedVariations.push(variation);
     }
-
-    if (selectedSpecification && selectedSpecification.id) {
-      // Set the selected specification ID in the state
-      setSpecId(selectedSpecification.id);
-  }
-  
-    setSelectedVariationState(variation);
+    
+    // Update the selected variations in the state
+    setSelectedVariationState(variation); // Use variation here, or updatedSelectedVariations if you intend to set the whole array
+    
     setOpen(false);
+    // Optionally, you can trigger updates in other components or perform additional actions here
   };
 
   const handleClose = () => {
