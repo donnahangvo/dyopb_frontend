@@ -63,22 +63,20 @@ interface ProductData {
   slug: string;
   product_sku: string;
   description: string;
-  price: string;
+  price: number;
   is_featured: boolean;
   images: ImageData[];
 }
 
-interface VariationComponentProps {
+interface ProductComponentProps {
   productId: number;
   selectedProduct: ProductData | null; 
   selectedVariation: VariationData | null; 
   selectedOption: OptionData | null;
   selectedSpecification: SpecificationData | null;
-  onPriceChange: (price: number) => void;
-  // onPriceChange: (price: number, productId: number) => void;
 }
 
-const VariationModal: React.FC<VariationComponentProps> = ({ productId, onPriceChange }) => {
+const VariationModal: React.FC<ProductComponentProps> = ({ productId }) => {
   const { selectedProduct, setSelectedProduct, setSelectedVariation, selectedVariation: contextSelectedVariation, selectedSpecification, selectedOption } = useProduct();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
@@ -87,7 +85,6 @@ const VariationModal: React.FC<VariationComponentProps> = ({ productId, onPriceC
   const [open, setOpen] = useState(false);
   const [specId, setSpecId] = useState<number | null>(null); // State variable to hold the specification_id
   const [selectedVariations, setSelectedVariations] = useState<VariationData[]>([]); // Define selectedVariations state variable
-  const [price, setPrice] = useState<number | null>(null); // State variable to hold the price
   
   useEffect(() => {
     const fetchData = async () => {
@@ -111,27 +108,30 @@ const VariationModal: React.FC<VariationComponentProps> = ({ productId, onPriceC
     fetchData();
   }, [productId]);
 
-  // const handlePriceChange = (newPrice: number, productId: number) => {
-  //   setPrice(newPrice);
-  //   // Pass both price and productId to the parent component
-  //   onPriceChange(newPrice, productId);
-  // };
-
-  const handlePriceChange = (newPrice: number) => {
-    setPrice(newPrice);
-    // Pass both price and productId to the parent component
-    onPriceChange(newPrice);
-  };
-
   const handleOpen = (variation: VariationData) => {
     setSelectedVariation(variation);
     setOpen(true);
     setSelectedVariationState(variation); // Update the selected variation in the context
   };
+  
 
   const handleChooseSelection = (variation: VariationData) => {
-    setSelectedVariationState(variation);
+    // Create a copy of the current selected variations array
+    const updatedSelectedVariations: VariationData[] = [...selectedVariations]; // Explicitly define the type as VariationData[]
+    
+    // Check if the selected variation is already in the array
+    const index = updatedSelectedVariations.findIndex(v => v.id === variation.id);
+    
+    // If the selected variation is not already in the array, add it
+    if (index === -1) {
+      updatedSelectedVariations.push(variation);
+    }
+    
+    // Update the selected variations in the state
+    setSelectedVariationState(variation); // Use variation here, or updatedSelectedVariations if you intend to set the whole array
+    
     setOpen(false);
+    // Optionally, you can trigger updates in other components or perform additional actions here
   };
 
   const handleClose = () => {
@@ -179,29 +179,31 @@ const VariationModal: React.FC<VariationComponentProps> = ({ productId, onPriceC
               </div>
             </div>
             <div>
-            {selectedVariation && (
-              <OptionModal 
-                productId={productId} 
-                variationId={selectedVariation.id} 
-                onPriceChange={handlePriceChange} // Pass function to update price
-              />
-            )}
+              {selectedVariation && (
+                <OptionModal 
+                  productId={productId} 
+                  variationId={selectedVariation.id} 
+                />
+              )}
             </div>
 
             <div>
-                      {selectedSpecification && (
+                {selectedSpecification && (
                       // Render SpecificationImage component with necessary props
-                        <SpecificationImage
-                          selectedProduct={selectedProduct} // Pass selected product
-                          selectedOption={selectedOption} // Pass selected option
-                          specificationId={selectedSpecification.id} // Pass selected specification ID
-                                />
-                            )}
-                        </div>
-                        <div>
-                          {price !== null && <p>Price: ${price}</p>}
-                        </div>
-
+                  <SpecificationImage
+                    selectedProduct={selectedProduct} // Pass selected product
+                    selectedOption={selectedOption} // Pass selected option
+                    specificationId={selectedSpecification.id} // Pass selected specification ID
+                    />
+                  )}
+              </div>
+              {/* <div className='font-semibold'>
+                {finalPrice !== Infinity ? (
+                  <p>Price: ${finalPrice}</p>
+                ) : (
+                  <p>Please make a selection</p>
+                )}
+              </div> */}
             <div className="mt-auto">
             <button 
                   className='bg-primary-purple text-white font-bold py-3 px-16 rounded-xl h-15' 

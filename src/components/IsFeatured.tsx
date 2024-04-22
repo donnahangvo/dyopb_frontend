@@ -23,7 +23,7 @@ interface ProductData {
     slug: string;
     product_sku: string;
     description: string;
-    price: string;
+    price: number;
     is_featured: boolean;
     images: ImageData[];
 }

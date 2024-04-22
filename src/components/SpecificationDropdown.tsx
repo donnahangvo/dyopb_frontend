@@ -6,7 +6,6 @@ interface ProductComponentProps {
     productId: number;
     optionId: number;
     onSpecificationSelect: (specification: SpecificationData) => void;
-    onPriceChange: (price: number) => void; // Define onPriceChange as a prop
 }
 
 interface ImageData {
@@ -32,13 +31,12 @@ interface SpecificationData {
     ordering: number;
 }
 
-const SpecificationDropdown: React.FC<ProductComponentProps & {onPriceChange: (price: number) => void, selectedSpecificationProp: SpecificationData | null; setSelectedSpecificationProp: (specification: SpecificationData | null) => void }> = ({
+const SpecificationDropdown: React.FC<ProductComponentProps & { selectedSpecificationProp: SpecificationData | null; setSelectedSpecificationProp: (specification: SpecificationData | null) => void }> = ({
     productId,
     optionId,
     onSpecificationSelect,
     selectedSpecificationProp,
-    setSelectedSpecificationProp,
-    onPriceChange, // Receive onPriceChange as a prop
+    setSelectedSpecificationProp
 }) => {
     // const { selectedSpecification: contextSelectedSpecification, setSpecification } = useProduct();
     const { selectedOption, selectedSpecification, setSelectedSpecification } = useProduct();
@@ -88,22 +86,9 @@ const SpecificationDropdown: React.FC<ProductComponentProps & {onPriceChange: (p
     };
 
 
-// const handleSpecificationSelect = (specification: SpecificationData) => {
-//     setSelectedSpecificationProp(specification); // Update the selected specification in the context
-//     setSelectedSpecification(specification); // Update context with selected specification
-//     onPriceChange(specification.price);
-//     onSpecificationSelect(specification); // Notify the parent component about the selected specification
-// };
-
-
 const handleSpecificationSelect = (specification: SpecificationData) => {
     setSelectedSpecificationProp(specification); // Update the selected specification in the context
     setSelectedSpecification(specification); // Update context with selected specification
-    if (specification.price !== undefined && specification.price !== null && !isNaN(specification.price)) {
-        onPriceChange(specification.price); // Pass the specification price to onPriceChange
-    } else {
-        // Handle the case when the price is invalid or unavailable
-    }
     onSpecificationSelect(specification); // Notify the parent component about the selected specification
 };
 
@@ -142,7 +127,6 @@ return (
                     {specification.image && specification.image.length > 0 && (
                         <img src={`${apiURL}/${specification.image}`} alt={specification.name} className='w-10 h-10 object-contain rounded-md mr-2' />
                     )}
-                    
                 </li>
             ))}
         </ul>

@@ -6,125 +6,134 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { apiURL } from "../api/server";
 import { useProduct } from '../context/ProductContext';
 
 
 // Interface for ImageData
 interface ImageData {
-    id: number;
-    product: number;
-    image: string; // Path to retrieve the image data
-    thumbnail: string; // Path to retrieve the thumbnail data
-  }
-  
-  // Interfaces for other data types
-  interface ProductData {
-    variations: any;
-    id: number;
-    category: number;
-    name: string;
-    slug: string;
-    product_sku: string;
-    description: string;
-    price: string;
-    is_featured: boolean;
-    images: ImageData[]; // Array of ImageData
-  }
-  
-  interface VariationData {
-    id: number;
-    product: number;
-    name: string;
-    slug: string;
-    variation_sku: string;
-    description: string;
-    image: ImageData[]; // Array of ImageData
-    thumbnail: ImageData[]; // Array of ImageData
-    ordering: number;
-  }
-  
-  interface OptionData {
-    id: number;
-    product: number;
-    variation: number;
-    name: string;
-    slug: string;
-    option_sku: string;
-    description: string;
-    price: number;
-    image: ImageData[]; // Array of ImageData
-    thumbnail: ImageData[]; // Array of ImageData
-    ordering: number;
-  }
-  
-  interface SpecificationData {
-    id: number;
-    product: number;
-    option: number;
-    name: string;
-    slug: string;
-    specification_sku: string;
-    description: string;
-    price: number;
-    num_available: number;
-    is_featured: boolean;
-    image: ImageData[]; // Array of ImageData
-    thumbnail: ImageData[]; // Array of ImageData
-    ordering: number;
-  }
+  id: number;
+  product: number;
+  image: string; // Path to retrieve the image data
+  thumbnail: string; // Path to retrieve the thumbnail data
+}
 
-  interface SummaryTableProps {
-    selectedProduct: ProductData | null;
-    selectedOptionSpecifications: { [key: number]: SpecificationData[] } | null;
-    selectedOption: OptionData| null;
-  }
-  
-  const SummaryTable: React.FC<SummaryTableProps> = ({ selectedProduct, selectedOption, selectedOptionSpecifications }) => {
-    // Check if selected product is available
+// Interfaces for other data types
+interface ProductData {
+  variations: any;
+  id: number;
+  category: number;
+  name: string;
+  slug: string;
+  product_sku: string;
+  description: string;
+  price: number;
+  is_featured: boolean;
+  images: ImageData[]; // Array of ImageData
+}
 
-    console.log("selected product", selectedProduct)
-    console.log("selectedOption", selectedOption)
-    console.log("array of selectedOptionSpecifications", selectedOptionSpecifications)
+interface VariationData {
+  id: number;
+  product: number;
+  name: string;
+  slug: string;
+  variation_sku: string;
+  description: string;
+  image: ImageData[]; // Array of ImageData
+  thumbnail: ImageData[]; // Array of ImageData
+  ordering: number;
+}
 
-        // Check if selected product is available
-        if (!selectedProduct) {
-          return <div>Start Designing!</div>; // You might want to handle loading state differently
-        }
+interface OptionData {
+  id: number;
+  product: number;
+  variation: number;
+  name: string;
+  slug: string;
+  option_sku: string;
+  description: string;
+  price: number;
+  image: ImageData[]; // Array of ImageData
+  thumbnail: ImageData[]; // Array of ImageData
+  ordering: number;
+}
 
-      
-        return (
-            <div className='pt-5 pb-5'>
-              <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 500 }} aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Variation</TableCell>
-                      <TableCell>Option</TableCell>
-                      <TableCell>Specification</TableCell>
-                      <TableCell>SKU</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {selectedProduct.variations.map(variation => (
-                      <React.Fragment key={variation.id}>
-                        {selectedOptionSpecifications?.[variation.id]?.map(specification => (
-                          <TableRow key={`${variation.id}-${specification.id}`}>
-                            <TableCell>{variation.name}</TableCell>
-                            <TableCell>{selectedOption ? selectedOption.name : 'Unknown Option'}</TableCell>
-                            <TableCell>{specification.name}</TableCell>
-                            <TableCell>{specification.specification_sku}</TableCell>
-                          </TableRow>
-                        ))}
-                      </React.Fragment>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
-          );
-        };
+interface SpecificationData {
+  id: number;
+  product: number;
+  option: number;
+  name: string;
+  slug: string;
+  specification_sku: string;
+  description: string;
+  price: number;
+  num_available: number;
+  is_featured: boolean;
+  image: ImageData[]; // Array of ImageData
+  thumbnail: ImageData[]; // Array of ImageData
+  ordering: number;
+}
+
+interface SummaryTableProps {
+  selectedProduct: ProductData | null;
+  selectedOptionSpecifications: { [key: number]: SpecificationData[] } | null;
+  selectedOption: OptionData| null;
+}
+
+const SummaryTable: React.FC<SummaryTableProps> = ({ selectedProduct, selectedOption, selectedOptionSpecifications }) => {
+  // Check if selected product is available
+
+  // console.log("selected product", selectedProduct)
+  // console.log("selectedOption", selectedOption)
+  // console.log("array of selectedOptionSpecifications", selectedOptionSpecifications)
+
+      // Check if selected product is available
+      if (!selectedProduct) {
+        return <div>Start Designing!</div>; // You might want to handle loading state differently
+      }
+
+    
+      return (
+          <div className='pt-5 pb-5'>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 500 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    {/* <TableCell>Variation</TableCell>
+                    <TableCell>Option</TableCell> */}
+                    <TableCell>Specification</TableCell>
+                    <TableCell>SKU</TableCell>
+                    <TableCell>Image</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {selectedProduct.variations.map(variation => (
+                    <React.Fragment key={variation.id}>
+                      {selectedOptionSpecifications?.[variation.id]?.map(specification => (
+                        <TableRow key={`${variation.id}-${specification.id}`}>
+                          {/* <TableCell>{variation.name}</TableCell>
+                          <TableCell>{selectedOption ? selectedOption.name : 'Unknown Option'}</TableCell> */}
+                          <TableCell>{specification.name}</TableCell>
+                          <TableCell>{specification.specification_sku}</TableCell>
+                          <TableCell className='w-10 h-10 object-contain'>
+                            <img src={`${apiURL}${specification.image}`} alt={specification.name} />
+                            </TableCell>
+                        </TableRow>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        );
+      };
+
 
 export default SummaryTable;
+
+
+
 
 
 // import React from 'react';

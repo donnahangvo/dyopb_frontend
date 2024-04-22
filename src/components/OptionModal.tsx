@@ -49,18 +49,15 @@ interface SpecificationData {
 interface OptionModalProps {
   productId: number;
   variationId: number;
-  price: number;
-  onPriceChange: (price: number | null) => void;
 }
 
-const OptionModal: React.FC<OptionModalProps> = ({ productId, variationId, onPriceChange }) => {
-    const { selectedOption, setSelectedSpecification, selectedSpecification, setSelectedOption, selectedOptionSpecifications, setSelectedOptionSpecifications } = useProduct(); // Destructure selectedOption and setSelectedSpecification from the useProduct hook
+const OptionModal: React.FC<OptionModalProps> = ({ productId, variationId }) => {
+    const { selectedOption, setSelectedSpecification, selectedSpecification, setSelectedOption, selectedOptionSpecifications, setSelectedOptionSpecifications, finalPrice } = useProduct(); // Destructure selectedOption and setSelectedSpecification from the useProduct hook
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
     const [options, setOptions] = useState<OptionData[]>([]);
     const [isOpen, setIsOpen] = useState<boolean>(false); // Local state for modal open/close
     const [selectedOptions, setSelectedOptions] = useState<{ [key: number]: SpecificationData }>({});
-    const [price, setPrice] = useState<number | null>(null); // State variable to hold the price
   
     useEffect(() => {
       const fetchData = async () => {
@@ -81,42 +78,32 @@ const OptionModal: React.FC<OptionModalProps> = ({ productId, variationId, onPri
       fetchData();
     }, [productId, variationId]);
 
-  // const handleOptionSelect = (option: OptionData) => {
-  //   const newPrice = // Calculate or extract the new price here based on the selected option
-    
-  //   // Call the onPriceChange function to update the price in the parent component
-  //   onPriceChange(newPrice);
-  //   setSelectedOption(option);
-  //   setIsOpen(true); // Open the modal when an option is selected
-  // };
-
-  // const handleOptionSelect = (option: OptionData) => {
-  //   setSelectedOption(option);
-  //   setIsOpen(true); // Open the modal when an option is selected
-  //   // Check if the selected option has a valid price
-  //   if (option.price !== undefined && option.price !== null && !isNaN(option.price)) {
-  //     // If the price is available and valid in the selected option, use it directly
-  //     onPriceChange(option.price);
-  //   } else {
-  //     console.error('Invalid price found in the selected option:', option.price);
-  //     // Handle the case of an invalid or missing price, e.g., show an error message to the user
-  //   }
-  // };
-
   const handleOptionSelect = (option: OptionData) => {
     setSelectedOption(option);
     setIsOpen(true); // Open the modal when an option is selected
-    // Check if the selected option has a valid price
-    // if (option.price !== undefined && option.price !== null && !isNaN(option.price)) {
-    //   // If the price is available and valid in the selected option, use it directly
-    //   onPriceChange(option.price);
-    // } else {
-    //   console.error('Invalid price found in the selected option:', option.price);
-    //   // Handle the case of an invalid or missing price, e.g., show an error message to the user
-    // }
   };
 
-  const handleChooseSelection = async () => {
+//   const handleChooseSelection = async () => {
+//     if (selectedOption && selectedSpecification && selectedSpecification.id !== void 0) {
+
+//         console.log("Selected Option", selectedOption)
+//         console.log("Selected Specification", selectedSpecification)
+//         console.log("Selected Specification ID", selectedSpecification.id)
+//         try {
+//             const url = `specification/${productId}/${selectedOption.id}/${selectedSpecification.id}`;
+//             const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
+//             setSelectedSpecification(specificationData);
+//             setSelectedOption(selectedOption);
+//             setIsOpen(false); // Close the modal after updating the specification
+//             setSelectedSpecification(null); // Clear the selected specification state
+            
+//         } catch (error) {
+//             setError(error.message || 'An error occurred while fetching specification data');
+//         }
+//     }
+// };
+
+const handleChooseSelection = async () => {
     if (selectedOption && selectedSpecification && selectedSpecification.id !== void 0) {
       try {
         const url = `specification/${productId}/${selectedOption.id}/${selectedSpecification.id}`;
@@ -161,92 +148,89 @@ const handleClose = () => {
     setSelectedSpecification(specification); // Set the selected specification in the context
   };
 
-  
-
-// // Define a callback function to pass the price to VariationModal.tsx
-// const handlePriceUpdate = (price: number | null) => {
-//     // Pass the price to VariationModal.tsx
-//     setPrice(price);
-//   };
-
-return (
-  <>
-    {options.map((option) => (
-      <Button key={option.id} onClick={() => handleOptionSelect(option)}>
-        {option.image && (
-          <img src={`${apiURL}/${option.image}`} alt={option.name} className='w-10 h-10 object-contain rounded-md mr-2' />
-        )}
-        {option.name}
-      </Button>
-    ))}
-    <Modal
-      open={isOpen}
-      onClose={handleClose}
-      aria-labelledby="child-modal-title"
-      aria-describedby="child-modal-description"
-    >
-      <div className="">
-        <Box sx={{
-          position: 'absolute' as 'absolute',
-          top: '50%',
-          left: '50%',
-          width: '100%',
-          maxWidth: 1000,
-          maxHeight: 600,
-          transform: 'translate(-50%, -50%)',
-          bgcolor: '#FDFFB6',
-          boxShadow: 24,
-          p: 3,
-          display: 'flex',
-          flexDirection: 'column'
-        }}>
-          {loading && <p>Loading...</p>}
-          {error && <p>Error: {error}</p>}
-          {!loading && options.length === 0 && <p>No options available for this product.</p>}
-          {selectedOption && (
-            <div className='flex-grow flex'>
-              <div>
-                <div>
-                  <h2 id="child-modal-title">{selectedOption.name}</h2>
-                  <div>
-                    {selectedOption.image && (
-                      <img src={`${apiURL}/${selectedOption.image}`} alt={selectedOption.name} className='w-10 h-10 object-contain rounded-md mr-2' />
-                    )}
-                    <div id="child-modal-description" className='p-3'><BackendText description={selectedOption.description} /></div>
-                  </div>
-                </div>
-                <div>
-                  <div className='p-2'>
-                  <SelectionTable
-                  selectedOption={selectedOption}
-                  selectedSpecification={selectedSpecification}
-                  />
-                  </div>
-                  <div>
-                    {/* {price !== null && <p>Price: ${price}</p>} */}
-                    </div>
-                  <div className="mt-auto">
-                    <button className='bg-primary-purple text-white font-bold py-3 px-16 rounded-xl h-15' onClick={handleChooseSelection}>Choose Selection</button>
-                  </div>
-                </div>
-              </div>
-              <div className="ml-auto">
-                  <SpecificationDropdown
-                  productId={productId}
-                  optionId={selectedOption?.id || 0} // assuming selectedOption is available
-                  onSpecificationSelect={handleSpecificationSelect}
-                  selectedSpecificationProp={selectedOptions[selectedOption!.id]}
-                  setSelectedSpecificationProp={() => {}} // Provide a dummy function if not needed
-                  onPriceChange={onPriceChange}
-                  />
-              </div>
-            </div>
+  return (
+    <>
+      {options.map((option) => (
+        <Button key={option.id} onClick={() => handleOptionSelect(option)}>
+          {option.image && (
+            <img src={`${apiURL}/${option.image}`} alt={option.name} className='w-10 h-10 object-contain rounded-md mr-2' />
           )}
-        </Box>
-      </div>
-    </Modal>
-  </>
-);
+          {option.name}
+        </Button>
+      ))}
+      <Modal
+        open={isOpen}
+        onClose={handleClose}
+        aria-labelledby="child-modal-title"
+        aria-describedby="child-modal-description"
+      >
+        <div className="">
+          <Box sx={{
+            position: 'absolute' as 'absolute',
+            top: '50%',
+            left: '50%',
+            width: '100%',
+            maxWidth: 1000,
+            maxHeight: 600,
+            transform: 'translate(-50%, -50%)',
+            bgcolor: '#FDFFB6',
+            boxShadow: 24,
+            p: 3,
+            display: 'flex',
+            flexDirection: 'column'
+          }}>
+            {loading && <p>Loading...</p>}
+            {error && <p>Error: {error}</p>}
+            {!loading && options.length === 0 && <p>No options available for this product.</p>}
+            {selectedOption && (
+              <div className='flex-grow flex'>
+                <div>
+                  <div>
+                    <h2 id="child-modal-title">{selectedOption.name}</h2>
+                    <div>
+                      {selectedOption.image && (
+                        <img src={`${apiURL}/${selectedOption.image}`} alt={selectedOption.name} className='w-10 h-10 object-contain rounded-md mr-2' />
+                      )}
+                      <div id="child-modal-description" className='p-3'><BackendText description={selectedOption.description} /></div>
+                    </div>
+
+                    {/* <div className='font-semibold'>
+                      {finalPrice !== Infinity ? (
+                        <p>Price: ${finalPrice}</p>
+                      ) : (
+                        <p>Please make a selection</p>
+                      )}
+                    </div> */}
+                    
+                  </div>
+                  <div>
+                    <div className='p-2'>
+                    <SelectionTable
+                    selectedOption={selectedOption}
+                    selectedSpecification={selectedSpecification}
+                    />
+                    </div>
+                    <div className="mt-auto">
+                      <button className='bg-primary-purple text-white font-bold py-3 px-16 rounded-xl h-15' onClick={handleChooseSelection}>Choose Selection</button>
+                    </div>
+                  </div>
+                </div>
+                <div className="ml-auto">
+                    <SpecificationDropdown
+                    productId={productId}
+                    optionId={selectedOption?.id || 0} // assuming selectedOption is available
+                    onSpecificationSelect={handleSpecificationSelect}
+                    selectedSpecificationProp={selectedOptions[selectedOption!.id]}
+                    setSelectedSpecificationProp={() => {}} // Provide a dummy function if not needed
+                    />
+                </div>
+              </div>
+            )}
+          </Box>
+        </div>
+      </Modal>
+    </>
+  );
 };
 
 export default OptionModal;

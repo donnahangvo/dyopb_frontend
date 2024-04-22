@@ -6,7 +6,7 @@ import Newsletter from './Newsletter';
 const Footer = () => {
     return (
   
-        <footer>
+        <footer className='z-index: 10'>
             <div className="footer-wrapper bg-secondary-yellow sticky bottom-0">
 
 
