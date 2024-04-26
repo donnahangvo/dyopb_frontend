@@ -9,6 +9,9 @@ import { ProductProvider } from './context/ProductContext';
 import { ProductReducerProvider } from './context/ProductReducer';
 import { ShoppingBagProvider } from './context/ShoppingBagContext';
 import ShoppingBagComponent from './components/ShoppingBagComponent';
+import { TaxContextProvider } from './context/TaxContext';
+import { Auth0Provider } from '@auth0/auth0-react';
+import { auth0Config } from './config/auth0.config';
 
 function App() {
   // State to control the visibility of the shopping bag component
@@ -18,10 +21,17 @@ function App() {
   const toggleBagVisibility = () => {
     setIsBagVisible(!isBagVisible);
     // Ensure that isBagVisible is toggled correctly
-    console.log("isBagVisible:", isBagVisible);
+    // console.log("isBagVisible:", isBagVisible);
   };
 
   return (
+    <Auth0Provider
+    domain={auth0Config.domain}
+    clientId={auth0Config.clientId}
+    authorizationParams={{
+      redirect_uri: window.location.origin
+    }}
+  >
     <HashRouter>
       <ShoppingBagProvider>
         <Navbar toggleBagVisibility={toggleBagVisibility} />
@@ -29,27 +39,32 @@ function App() {
         {isBagVisible && <ShoppingBagComponent isVisible={isBagVisible} toggleVisibility={toggleBagVisibility} />}
         <ProductProvider>
           <ProductReducerProvider>
-            <Routes>
-              <Route path=":categorySlug/" element={<Category />} />
-              <Route path="/product/:productSlug/" element={<Product />} />
-              <Route path=":categorySlug/:productSlug/" element={<Product />} />
-              {routes.map((route, index) => (
-                <Route
-                  key={index}
-                  path={route.path}
-                  element={<route.component />}
-                />
-              ))}
-            </Routes>
+            {/* Wrap your entire application with TaxContextProvider */}
+            <TaxContextProvider>
+              <Routes>
+                <Route path=":categorySlug/" element={<Category />} />
+                <Route path="/product/:productSlug/" element={<Product />} />
+                <Route path=":categorySlug/:productSlug/" element={<Product />} />
+                {routes.map((route, index) => (
+                  <Route
+                    key={index}
+                    path={route.path}
+                    element={<route.component />}
+                  />
+                ))}
+              </Routes>
+            </TaxContextProvider>
           </ProductReducerProvider>
         </ProductProvider>
         <Footer />
       </ShoppingBagProvider>
     </HashRouter>
+    </Auth0Provider>
   );
 }
 
 export default App;
+
 
 
 

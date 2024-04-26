@@ -169,7 +169,7 @@ const VariationModal: React.FC<ProductComponentProps> = ({ productId }) => {
             width: '100%', 
             maxWidth: 1000, 
             transform: 'translate(-50%, -50%)', 
-            bgcolor: '#FFD6A5', 
+            bgcolor: '#FFAC81', 
             boxShadow: 24,
             p: 5 }}>
             <div className=''>

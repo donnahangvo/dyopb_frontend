@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Logo from '../assets/images/AELogo.png';
 import ExploreDropdown from './ExploreDropdown';
 import CategoryDropdown from './CategoryDropdown';
+import UserDropdown from './UserDropdown';
 
 interface NavbarProps {
     toggleBagVisibility: () => void;
@@ -10,7 +11,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ toggleBagVisibility }) => {
     return (
-        <nav className='flex items-center justify-between flex-wrap bg-primary-red p-3'>
+        <nav className='flex items-center justify-between flex-wrap bg-primary-red p-3 z-index:100'>
             <div className='flex items-center flex-shrink-0 text-white mr-6'>
                 <Link to='/'>
                     <img className="object-fit h-10" src={Logo} alt="Adorkable Emporium" />
@@ -28,10 +29,10 @@ const Navbar: React.FC<NavbarProps> = ({ toggleBagVisibility }) => {
                     <div className='flex place-items-center mt-2 mr-3 lg:inline-block lg:mt-0 text-white font-semibold'><CategoryDropdown /></div>
                 </div>
                 <div>
-                    <Link to='#' className='flex place-items-center mt-2 lg:inline-block lg:mt-0 text-white font-semibold hover:text-primary-purple mr-5'><i className="fa-solid fa-magnifying-glass"></i></Link>
+                    <div className='flex place-items-center mt-2 lg:inline-block lg:mt-0 text-white font-semibold hover:text-primary-purple mr-5'><UserDropdown /></div>
                 </div>
                 <div>
-                    <Link to='#' className='flex place-items-center mt-2 lg:inline-block lg:mt-0 text-white font-semibold hover:text-primary-purple mr-5'><i className="fa-solid fa-user"></i></Link>
+                    <Link to='#' className='flex place-items-center mt-2 lg:inline-block lg:mt-0 text-white font-semibold hover:text-primary-purple mr-5'><i className="fa-solid fa-magnifying-glass"></i></Link>
                 </div>
                 <div>
                     <Link to='#' onClick={toggleBagVisibility} className='flex place-items-center mt-2 lg:inline-block lg:mt-0 text-white hover:text-primary-purple'>

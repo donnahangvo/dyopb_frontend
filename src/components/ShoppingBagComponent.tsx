@@ -89,7 +89,7 @@ const ShoppingBagComponent: React.FC<ShoppingBagProps> = ({ isVisible, toggleVis
           )}
 
           {/* Footer */}
-          <ShoppingBagFooter totalAmount={totalAmount} />
+          <ShoppingBagFooter totalAmount={totalAmount} toggleVisibility={toggleVisibility} />
         </div>
 
         {/* Empty space */}

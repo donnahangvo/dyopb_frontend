@@ -173,7 +173,7 @@ const handleClose = () => {
             maxWidth: 1000,
             maxHeight: 600,
             transform: 'translate(-50%, -50%)',
-            bgcolor: '#FDFFB6',
+            bgcolor: '#FFD6A5',
             boxShadow: 24,
             p: 3,
             display: 'flex',

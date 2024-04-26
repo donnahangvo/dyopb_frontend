@@ -68,8 +68,8 @@ const IsFeatured: React.FC = () => {
     };
 
     return (
-        <div className="relative bg-primary-orange p-2">
-            <div className="flex flex-wrap justify-center bg-primary-orange pt-2 font-semibold text-lg">
+        <div className="relative bg-secondary-purple p-2">
+            <div className="flex flex-wrap justify-center bg-secondary-purple pt-2 font-semibold text-lg">
                 Featured Products
             </div>
             <i className="absolute top-1/2 left-2 opacity-80 fa-solid fa-chevron-left cursor-pointer hover:opacity-100" onClick={slideLeft} style={{ fontSize: '20px', transform: 'translateY(-50%)' }}></i>

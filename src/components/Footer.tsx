@@ -5,9 +5,8 @@ import Newsletter from './Newsletter';
 
 const Footer = () => {
     return (
-  
-        <footer className='z-index: 10'>
-            <div className="footer-wrapper bg-secondary-yellow sticky bottom-0">
+        <footer className='bg-secondary-yellow'>
+            <div className="footer-wrapper">
 
 
                 <div className="footer-social-media flex flex-col items-center">
@@ -49,6 +48,6 @@ const Footer = () => {
             </div>
         </footer>
     );
-  };
+};
 
 export default Footer;
