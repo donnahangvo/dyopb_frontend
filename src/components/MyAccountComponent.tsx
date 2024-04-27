@@ -1,9 +1,12 @@
 import React from 'react'
+import UserProfile from './UserProfile'
+import OrdersComponent from './OrdersComponent'
 
 const MyAccountComponent = () => {
   return (
     <div>
-      My Account Dashboard goes here
+      <UserProfile />
+      <OrdersComponent />
     </div>
   )
 }
