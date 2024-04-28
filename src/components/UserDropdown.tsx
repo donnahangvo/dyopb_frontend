@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 
 function UserDropdown() {
     const [isOpen, setIsOpen] = useState(false);
-    const [isVisible, setIsVisible] = useState(false);
-    const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
+    // const [isVisible, setIsVisible] = useState(false);
+    const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
     const signOutOnClick = () => {
         logout({ logoutParams: { returnTo: window.location.origin } });

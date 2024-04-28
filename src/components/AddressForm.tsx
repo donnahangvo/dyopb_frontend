@@ -1,12 +1,12 @@
-import * as React from 'react';
+// import * as React from 'react';
 import { styled } from '@mui/system';
 import Grid from '@mui/material/Grid';
 import FormLabel from '@mui/material/FormLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { useTaxContext } from '../context/TaxContext';
-import { server_calls } from "../api/server";
+// import { useTaxContext } from '../context/TaxContext';
+// import { server_calls } from "../api/server";
 
 const FormGrid = styled(Grid)(() => ({
   display: 'flex',
@@ -14,30 +14,30 @@ const FormGrid = styled(Grid)(() => ({
 }));
 
 function AddressForm() {
-  const { dispatch } = useTaxContext();
+  // const { dispatch } = useTaxContext();
 
-  const handleAddressSubmit = async () => {
-    try {
-      // Make HTTP GET request to your Django backend API endpoint
-      const response = await server_calls.get<{ taxAmount: number }>('cart/detail');
+  // const handleAddressSubmit = async () => {
+  //   try {
+  //     // Make HTTP GET request to your Django backend API endpoint
+  //     const response = await server_calls.get<{ taxAmount: number }>('cart/detail');
 
-      // Get the tax amount from the response
-      const { taxAmount } = response.data;
+  //     // Get the tax amount from the response
+  //     const { taxAmount } = response.data;
 
-      // Calculate tax based on address
-      const newTaxAmount = calculateTax();
+  //     // Calculate tax based on address
+  //     const newTaxAmount = calculateTax();
 
-      // Dispatch action to update tax amount
-      dispatch({ type: 'UPDATE_TAX', payload: newTaxAmount });
-    } catch (error) {
-      console.error('Error calculating tax:', error);
-    }
-  };
+  //     // Dispatch action to update tax amount
+  //     dispatch({ type: 'UPDATE_TAX', payload: newTaxAmount });
+  //   } catch (error) {
+  //     console.error('Error calculating tax:', error);
+  //   }
+  // };
 
-  // Function to calculate tax (replace with your logic)
-  const calculateTax = (): number => {
-    return 10; // Placeholder value
-  };
+  // // Function to calculate tax (replace with your logic)
+  // const calculateTax = (): number => {
+  //   return 10; // Placeholder value
+  // };
 
   return (
         <div>

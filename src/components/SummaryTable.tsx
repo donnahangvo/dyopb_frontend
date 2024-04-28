@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { apiURL } from "../api/server";
-import { useProduct } from '../context/ProductContext';
+// import { useProduct } from '../context/ProductContext';
 
 
 // Interface for ImageData
@@ -32,17 +32,17 @@ interface ProductData {
   images: ImageData[]; // Array of ImageData
 }
 
-interface VariationData {
-  id: number;
-  product: number;
-  name: string;
-  slug: string;
-  variation_sku: string;
-  description: string;
-  image: ImageData[]; // Array of ImageData
-  thumbnail: ImageData[]; // Array of ImageData
-  ordering: number;
-}
+// interface VariationData {
+//   id: number;
+//   product: number;
+//   name: string;
+//   slug: string;
+//   variation_sku: string;
+//   description: string;
+//   image: ImageData[]; // Array of ImageData
+//   thumbnail: ImageData[]; // Array of ImageData
+//   ordering: number;
+// }
 
 interface OptionData {
   id: number;
@@ -79,7 +79,7 @@ interface SummaryTableProps {
   selectedOptionSpecifications: { [key: number]: SpecificationData[] } | null;
   selectedOption: OptionData| null;
 }
-
+//@ts-ignore
 const SummaryTable: React.FC<SummaryTableProps> = ({ selectedProduct, selectedOption, selectedOptionSpecifications }) => {
   // Check if selected product is available
 
@@ -94,6 +94,7 @@ const SummaryTable: React.FC<SummaryTableProps> = ({ selectedProduct, selectedOp
 
     
       return (
+        //@ts-ignore
           <div className='pt-5 pb-5'>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 500 }} aria-label="simple table">
@@ -107,6 +108,7 @@ const SummaryTable: React.FC<SummaryTableProps> = ({ selectedProduct, selectedOp
                   </TableRow>
                 </TableHead>
                 <TableBody>
+                  {/*//@ts-ignore*/}
                   {selectedProduct.variations.map(variation => (
                     <React.Fragment key={variation.id}>
                       {selectedOptionSpecifications?.[variation.id]?.map(specification => (

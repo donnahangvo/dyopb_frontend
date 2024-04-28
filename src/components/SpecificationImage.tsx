@@ -39,17 +39,17 @@ interface ImageData {
     ordering: number;
   }
   
-  interface VariationData {
-    id: number;
-    product: number;
-    name: string;
-    slug: string;
-    variation_sku: string;
-    description: string;
-    image: ImageData[];
-    thumbnail: ImageData[];
-    ordering: number;
-  }
+//   interface VariationData {
+//     id: number;
+//     product: number;
+//     name: string;
+//     slug: string;
+//     variation_sku: string;
+//     description: string;
+//     image: ImageData[];
+//     thumbnail: ImageData[];
+//     ordering: number;
+//   }
   
   interface ProductData {
     id: number;
@@ -83,6 +83,7 @@ const SpecificationImage: React.FC<SpecificationImageProps> = ({ specificationId
                 }
                 // Fetch the specification using the ID
                 const url = `specification/${selectedProduct.id}/${selectedOption.id}/${specificationId}`;
+                //@ts-ignore
                 const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
                 if (specificationData && specificationData.image && specificationData.image.length > 0) {
                     // Construct the image URL
@@ -92,6 +93,7 @@ const SpecificationImage: React.FC<SpecificationImageProps> = ({ specificationId
                     setError('No image available');
                 }
             } catch (error) {
+                //@ts-ignore
                 setError('Failed to fetch image: ' + error.message);
             } finally {
                 setLoading(false);

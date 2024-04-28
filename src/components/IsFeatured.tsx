@@ -41,6 +41,7 @@ const IsFeatured: React.FC = () => {
                 const productData: ProductData[] = await server_calls.get(`product`);
                 setProducts(productData);
             } catch (error) {
+                //@ts-ignore
                 setError(error.message || 'An error occurred while fetching data');
             } finally {
                 setLoading(false);

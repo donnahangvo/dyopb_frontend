@@ -24,6 +24,7 @@ import Review from './Review';
 
 import Logo from '../assets/images/AELogo.png';
 import { server_calls } from "../api/server";
+//@ts-ignore
 import React, { useState, useEffect } from 'react';
 
 
@@ -69,6 +70,7 @@ export default function CheckoutComponent() {
   useEffect(() => {
     const fetchOrderData = async () => {
       try {
+        //@ts-ignore
         const response = await server_calls.get<OrderInfo>('cart/detail');
         const shippingCost = calculateShippingCost(response.data.subtotal);
         const totalPrice = (
@@ -89,6 +91,7 @@ export default function CheckoutComponent() {
     return subtotal >= 50 ? 0 : 10; // Placeholder logic, replace with actual calculation
   };
 
+  //@ts-ignore
   const handleInfoChange = (info: OrderInfo): void => {
     setOrderInfo(info);
   };

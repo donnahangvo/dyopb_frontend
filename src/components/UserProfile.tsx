@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { styled } from '@mui/system';
 import Grid from '@mui/material/Grid';
 import FormLabel from '@mui/material/FormLabel';

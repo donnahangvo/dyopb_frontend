@@ -52,6 +52,7 @@ interface OptionModalProps {
 }
 
 const OptionModal: React.FC<OptionModalProps> = ({ productId, variationId }) => {
+  //@ts-ignore
     const { selectedOption, setSelectedSpecification, selectedSpecification, setSelectedOption, selectedOptionSpecifications, setSelectedOptionSpecifications, finalPrice } = useProduct(); // Destructure selectedOption and setSelectedSpecification from the useProduct hook
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
@@ -62,6 +63,7 @@ const OptionModal: React.FC<OptionModalProps> = ({ productId, variationId }) => 
     useEffect(() => {
       const fetchData = async () => {
         try {
+          //@ts-ignore
           const optionData: OptionData[] = await server_calls.get<OptionData[]>(`option/${productId}/${variationId}`);
           const sortedOptions = [...optionData].sort((a, b) => a.ordering - b.ordering);
           if (optionData && optionData.length > 0) {
@@ -70,6 +72,7 @@ const OptionModal: React.FC<OptionModalProps> = ({ productId, variationId }) => 
             setError('Options not found');
           }
         } catch (error) {
+          //@ts-ignore
           setError(error.message || 'An error occurred while fetching data');
         } finally {
           setLoading(false);
@@ -83,32 +86,14 @@ const OptionModal: React.FC<OptionModalProps> = ({ productId, variationId }) => 
     setIsOpen(true); // Open the modal when an option is selected
   };
 
-//   const handleChooseSelection = async () => {
-//     if (selectedOption && selectedSpecification && selectedSpecification.id !== void 0) {
-
-//         console.log("Selected Option", selectedOption)
-//         console.log("Selected Specification", selectedSpecification)
-//         console.log("Selected Specification ID", selectedSpecification.id)
-//         try {
-//             const url = `specification/${productId}/${selectedOption.id}/${selectedSpecification.id}`;
-//             const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
-//             setSelectedSpecification(specificationData);
-//             setSelectedOption(selectedOption);
-//             setIsOpen(false); // Close the modal after updating the specification
-//             setSelectedSpecification(null); // Clear the selected specification state
-            
-//         } catch (error) {
-//             setError(error.message || 'An error occurred while fetching specification data');
-//         }
-//     }
-// };
-
+//@ts-ignore
 const handleChooseSelection = async () => {
     if (selectedOption && selectedSpecification && selectedSpecification.id !== void 0) {
       try {
         const url = `specification/${productId}/${selectedOption.id}/${selectedSpecification.id}`;
         
         // Fetch specification data
+        //@ts-ignore
         const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
   
         // Update selected specification and option
@@ -128,6 +113,7 @@ const handleChooseSelection = async () => {
          }));
         
       } catch (error) {
+        //@ts-ignore
         setError(error.message || 'An error occurred while fetching specification data');
       }
     }
@@ -149,6 +135,7 @@ const handleClose = () => {
   };
 
   return (
+    //@ts-ignore
     <>
       {options.map((option) => (
         <Button key={option.id} onClick={() => handleOptionSelect(option)}>
@@ -193,18 +180,11 @@ const handleClose = () => {
                       )}
                       <div id="child-modal-description" className='p-3'><BackendText description={selectedOption.description} /></div>
                     </div>
-
-                    {/* <div className='font-semibold'>
-                      {finalPrice !== Infinity ? (
-                        <p>Price: ${finalPrice}</p>
-                      ) : (
-                        <p>Please make a selection</p>
-                      )}
-                    </div> */}
                     
                   </div>
                   <div>
                     <div className='p-2'>
+                      {/*//@ts-ignore*/}
                     <SelectionTable
                     selectedOption={selectedOption}
                     selectedSpecification={selectedSpecification}

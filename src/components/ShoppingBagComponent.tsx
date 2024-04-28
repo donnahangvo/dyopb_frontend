@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import Logo from '../assets/images/AELogo.png';
+// import Logo from '../assets/images/AELogo.png';
 import ShoppingBagFooter from './ShoppingBagFooter';
 import { useShoppingBag } from '../context/ShoppingBagContext';
 

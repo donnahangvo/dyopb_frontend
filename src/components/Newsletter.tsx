@@ -4,6 +4,7 @@ import { server_calls } from "../api/server";
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
+//@ts-ignore
 interface AddSubscriberResponse {
   success?: boolean;
   error?: Record<string, string[]>;

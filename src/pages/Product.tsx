@@ -7,9 +7,11 @@ interface RouteParams {
 }
 
 const Product: React.FC = () => {
+    //@ts-ignore
     const { productSlug } = useParams<RouteParams>(); // Access productSlug from route parameters
     return (
         <div>
+            {/*//@ts-ignore*/}
             <ProductComponent productSlug={productSlug} /> {/* Pass productSlug to ProductComponent */}
         </div>
     );

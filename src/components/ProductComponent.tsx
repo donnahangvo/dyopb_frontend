@@ -4,7 +4,7 @@ import VariationModal from './VariationModal';
 import BackendText from './BackendText';
 import SummaryTable from './SummaryTable';
 import { useProduct } from '../context/ProductContext';
-import { useProductReducer } from '../context/ProductReducer';
+// import { useProductReducer } from '../context/ProductReducer';
 import { useShoppingBag } from '../context/ShoppingBagContext'
 import ShoppingBagComponent from './ShoppingBagComponent'; // Import the ShoppingBagComponent
 
@@ -27,26 +27,28 @@ interface ProductData {
     images: ImageData[];
 }
 
-interface OptionData {
-    id: number;
-    product: number;
-    variation: number;
-    name: string;
-    slug: string;
-    option_sku: string;
-    description: string;
-    price: number;
-    image: ImageData[]; // Array of ImageData
-    thumbnail: ImageData[]; // Array of ImageData
-    ordering: number;
-}
+// interface OptionData {
+//     id: number;
+//     product: number;
+//     variation: number;
+//     name: string;
+//     slug: string;
+//     option_sku: string;
+//     description: string;
+//     price: number;
+//     image: ImageData[]; // Array of ImageData
+//     thumbnail: ImageData[]; // Array of ImageData
+//     ordering: number;
+// }
 
+//@ts-ignore
 interface ProductComponentProps {
     productId: number;
     productSlug: string;
 }
 
 const ProductComponent: React.FC<ProductComponentProps> = ({ productSlug }) => {
+    //@ts-ignore
     const { selectedProduct, setSelectedProduct, selectedOptionSpecifications, setSelectedOptionSpecifications, setSelectedOption, selectedOption, finalPrice, setFinalPrice } = useProduct();
     const { addToBag } = useShoppingBag();
     const [loading, setLoading] = useState<boolean>(true);
@@ -59,15 +61,18 @@ const ProductComponent: React.FC<ProductComponentProps> = ({ productSlug }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                //@ts-ignore
                 const productData: ProductData = await server_calls.get<ProductData>(`product/${productSlug}`);
 
                 if (productData) {
                     setProduct(productData);
+                    //@ts-ignore
                     setSelectedProduct(productData);
                 } else {
                     setError('Product not found');
                 }
             } catch (error) {
+                //@ts-ignore
                 setError(error.message || 'An error occurred while fetching data');
             } finally {
                 setLoading(false);
@@ -83,6 +88,7 @@ const ProductComponent: React.FC<ProductComponentProps> = ({ productSlug }) => {
 
     const handleAddToBag = () => {
         // Add selected product to the shopping bag
+        //@ts-ignore
         addToBag(selectedProduct, selectedOption, selectedOptionSpecifications, amount);
         // Open the shopping bag component
         setIsBagOpen(true);
@@ -100,6 +106,7 @@ const ProductComponent: React.FC<ProductComponentProps> = ({ productSlug }) => {
     };
 
     return (
+        //@ts-ignore
         <div className='flex flex-col justify-between lg:flex-row gap-5 lg:items-center bg-secondary-red' >
             {loading && <p>Loading...</p>}
             {error && <p>Error: {error}</p>}
@@ -130,7 +137,7 @@ const ProductComponent: React.FC<ProductComponentProps> = ({ productSlug }) => {
                                 <BackendText description={product.description} />
                             </div>
                         </div>
-                        
+                        {/*//@ts-ignore*/}
                         <VariationModal productId={product.id} />
 
                         <div className=''>

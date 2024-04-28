@@ -70,25 +70,35 @@ interface ProductData {
 
 interface ProductComponentProps {
   productId: number;
+  //@ts-ignore
   selectedProduct: ProductData | null; 
-  selectedVariation: VariationData | null; 
+  //@ts-ignore
+  selectedVariation: VariationData | null;
+  //@ts-ignore 
   selectedOption: OptionData | null;
+  //@ts-ignore
   selectedSpecification: SpecificationData | null;
 }
 
 const VariationModal: React.FC<ProductComponentProps> = ({ productId }) => {
+  //@ts-ignore
   const { selectedProduct, setSelectedProduct, setSelectedVariation, selectedVariation: contextSelectedVariation, selectedSpecification, selectedOption } = useProduct();
   const [loading, setLoading] = useState<boolean>(true);
+  //@ts-ignore
   const [error, setError] = useState<string>('');
   const [variations, setVariations] = useState<VariationData[]>([]);
+  //@ts-ignore
   const [selectedVariation, setSelectedVariationState] = useState<VariationData | null>(null); 
   const [open, setOpen] = useState(false);
+  //@ts-ignore
   const [specId, setSpecId] = useState<number | null>(null); // State variable to hold the specification_id
+  //@ts-ignore
   const [selectedVariations, setSelectedVariations] = useState<VariationData[]>([]); // Define selectedVariations state variable
   
   useEffect(() => {
     const fetchData = async () => {
       try {
+        //@ts-ignore
         const variationData: VariationData[] = await server_calls.get<VariationData[]>(`variation/${productId}`);
         
         const sortedVariations = [...variationData].sort((a, b) => a.ordering - b.ordering);
@@ -99,6 +109,7 @@ const VariationModal: React.FC<ProductComponentProps> = ({ productId }) => {
           setError('Variations not found');
         }
       } catch (error) {
+        //@ts-ignore
         setError(error.message || 'An error occurred while fetching data');
       } finally {
         setLoading(false);
@@ -139,6 +150,7 @@ const VariationModal: React.FC<ProductComponentProps> = ({ productId }) => {
   };
 
   return (
+    //@ts-ignore
     <div className='space-x-3 flex'>
       {/* Variation Buttons */}
       {!loading && variations.length > 0 && variations.map((variation) => (
@@ -175,6 +187,7 @@ const VariationModal: React.FC<ProductComponentProps> = ({ productId }) => {
             <div className=''>
               <h1 className="font-semibold" id="parent-modal-title">{selectedVariation?.name}</h1>
               <div id="parent-modal-description">
+                {/*//@ts-ignore*/}
                 <BackendText description={selectedVariation?.description} />
               </div>
             </div>

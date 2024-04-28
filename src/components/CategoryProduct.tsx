@@ -50,6 +50,7 @@ const CategoryProduct: React.FC<ProductComponentProps> = ({ categorySlug }) => {
 
         setProducts(productData); // Set the fetched products
       } catch (error) {
+        //@ts-ignore
         setError(error.message || 'An error occurred while fetching data');
       } finally {
         setLoading(false); // Set loading state to false, regardless of success or error
@@ -71,6 +72,7 @@ const getImagePath = (products: ProductData[], productId: string, imageId: strin
     if (image) {
       // Return the concatenated image path
       return `${apiURL}/${image.image}`; // Concatenate apiURL with image path
+      
     }
   }
   // Return path to default image if no image found

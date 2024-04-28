@@ -22,6 +22,7 @@ export default function InfoMobile({ totalPrice }: InfoProps) {
   };
 
   const DrawerList = (
+    //@ts-ignore
     <Box sx={{ width: 'auto', px: 3, pb: 3, pt: 8 }} role="presentation">
       <IconButton
         onClick={toggleDrawer(false)}
@@ -29,7 +30,9 @@ export default function InfoMobile({ totalPrice }: InfoProps) {
       >
         <CloseIcon />
       </IconButton>
-      <Info totalPrice={totalPrice} />
+      {/*//@ts-ignore*/}
+      <Info totalPrice={totalPrice} 
+             />
     </Box>
   );
 

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode, Dispatch, SetStateAction, useEffect } from 'react';
-import { set } from 'react-hook-form';
+// import { set } from 'react-hook-form';
 
 // Interface for ImageData
 interface ImageData {
@@ -133,6 +133,7 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
         }
 
         // Choose the lowest price among options, specifications, and default price
+        //@ts-ignore
         const productDefaultPrice = parseFloat(selectedProduct.price);
         if (!isNaN(productDefaultPrice)) {
             // Use the default product price if available

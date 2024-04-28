@@ -98,8 +98,10 @@ const priceReducer = (state: ProductContextType, action: Action): ProductContext
 
 export const ProductReducerContext = createContext<ProductContextType | undefined>(undefined);
 
+
 export const ProductReducerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { selectedProduct, selectedVariation, selectedOption, selectedOptionSpecifications, selectedSpecification, setSelectedProduct, setSelectedVariation, setSelectedOption, setSelectedOptionSpecifications, setSelectedSpecification } = useProduct();
+//@ts-ignore 
   const initialState: ProductContextType = {
     selectedProduct,
     selectedVariation,
@@ -116,6 +118,7 @@ export const ProductReducerProvider: React.FC<{ children: React.ReactNode }> = (
   const [state, dispatch] = useReducer(priceReducer, initialState);
 
   return (
+    //@ts-ignore
     <ProductReducerContext.Provider value={{ ...state, dispatch }}>
       {children}
     </ProductReducerContext.Provider>

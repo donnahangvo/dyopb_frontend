@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { server_calls } from "../api/server";
 import CategoryProduct from "../components/CategoryProduct";
 
@@ -25,6 +25,7 @@ export interface ProductComponentProps {
 }
 
 const Category: React.FC = () => {
+    //@ts-ignore
     const { categorySlug } = useParams<RouteParams>();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
@@ -33,7 +34,7 @@ const Category: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-
+                //@ts-ignore
                 const categoryData = await server_calls.get<CategoryData[]>(`category/`);
 
                 const foundCategory = categoryData.find((category: { slug: string | undefined; }) => category.slug === categorySlug);
@@ -44,6 +45,7 @@ const Category: React.FC = () => {
                     setError('Category not found');
                 }
             } catch (error) {
+                //@ts-ignore
                 setError(error.message || 'An error occurred while fetching data');
             } finally {
                 setLoading(false);

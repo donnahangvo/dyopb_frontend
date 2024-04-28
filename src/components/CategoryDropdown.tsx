@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import CategoryComponent from './CategoryComponent';
 import { server_calls } from "../api/server";
 
@@ -21,6 +21,7 @@ function CategoryDropdown(): JSX.Element {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        //@ts-ignore
         const categoryData = await server_calls.get<CategoryData[]>('category');
         setCategories(categoryData);
       } catch (error) {

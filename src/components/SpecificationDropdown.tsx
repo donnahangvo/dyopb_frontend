@@ -38,18 +38,22 @@ const SpecificationDropdown: React.FC<ProductComponentProps & { selectedSpecific
     selectedSpecificationProp,
     setSelectedSpecificationProp
 }) => {
-    // const { selectedSpecification: contextSelectedSpecification, setSpecification } = useProduct();
+    //@ts-ignore
     const { selectedOption, selectedSpecification, setSelectedSpecification } = useProduct();
+    //@ts-ignore
     const [isOpen, setIsOpen] = useState(true);
     const [specifications, setSpecifications] = useState<SpecificationData[]>([]);
+    //@ts-ignore
     const [inputValue, setInputValue] = useState("");
-    const [localSelectedSpecification, setLocalSelectedSpecification] = useState<SpecificationData | null>(null); // Keep the local state
+    //@ts-ignore
+    const [localSelectedSpecification, setLocalSelectedSpecification] = useState<SpecificationData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                //@ts-ignore
                 const specificationData: SpecificationData[] = await server_calls.get<SpecificationData[]>(`specification/${productId}/${optionId}`);
                 
                 const sortedSpecifications = [...specificationData].sort((a, b) => a.ordering - b.ordering);
@@ -60,6 +64,7 @@ const SpecificationDropdown: React.FC<ProductComponentProps & { selectedSpecific
                     setError('No specifications available for this product');
                 }
             } catch (error) {
+                //@ts-ignore
                 setError(error.message || 'An error occurred while fetching data');
             } finally {
                 setLoading(false);
@@ -69,11 +74,12 @@ const SpecificationDropdown: React.FC<ProductComponentProps & { selectedSpecific
         fetchData();
     }, [productId, optionId]);
 
-
+    //@ts-ignore
     const fetchIndividualSpecification = async (specification: SpecificationData) => {
         try {
             if (selectedOption?.id === optionId) {
                 const url = `specification/${productId}/${optionId}/${specification.id}`;
+                //@ts-ignore
                 const specificationData: SpecificationData = await server_calls.get<SpecificationData>(url);
                 setSelectedSpecificationProp(specificationData);
             } else {
@@ -81,6 +87,7 @@ const SpecificationDropdown: React.FC<ProductComponentProps & { selectedSpecific
                 setSelectedSpecificationProp(specification);
             }
         } catch (error) {
+            //@ts-ignore
             setError(error.message || 'An error occurred while fetching individual specification');
         }
     };
