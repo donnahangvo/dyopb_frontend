@@ -96,6 +96,7 @@ const ProductComponent: React.FC<ProductComponentProps> = ({ productSlug }) => {
         resetComponent();
     };
 
+
     const resetComponent = () => {
         setActiveImgIndex(0);
         setAmount(1);

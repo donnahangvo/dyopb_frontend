@@ -1,11 +1,53 @@
 import React, { useRef, useEffect } from 'react';
-// import Logo from '../assets/images/AELogo.png';
+import Logo from '../assets/images/AELogo.png';
+import { apiURL } from "../api/server";
 import ShoppingBagFooter from './ShoppingBagFooter';
 import { useShoppingBag } from '../context/ShoppingBagContext';
+
+interface ImageData {
+  id: number;
+  product: number;
+  image: string; 
+  thumbnail: string; 
+}
 
 interface ShoppingBagProps {
   isVisible: boolean;
   toggleVisibility: () => void;
+}
+
+interface SpecificationData {
+  id: number;
+  product: number;
+  option: number;
+  name: string;
+  slug: string;
+  specification_sku: string;
+  description: string;
+  price: number;
+  num_available: number;
+  is_featured: boolean;
+  image: ImageData[]; 
+  thumbnail: ImageData[]; 
+  ordering: number;
+}
+
+interface ProductData {
+  variations: any;
+  id: number;
+  category: number;
+  name: string;
+  slug: string;
+  product_sku: string;
+  description: string;
+  price: number;
+  is_featured: boolean;
+  images: ImageData[];
+}
+
+interface SelectedOptionSpecifications {
+  specifications: SpecificationData[]; // Assuming SpecificationData is the type for each specification
+  // Add other properties if present in selectedOptionSpecs
 }
 
 const ShoppingBagComponent: React.FC<ShoppingBagProps> = ({ isVisible, toggleVisibility }) => {
@@ -40,12 +82,27 @@ const ShoppingBagComponent: React.FC<ShoppingBagProps> = ({ isVisible, toggleVis
     };
   }, [isVisible]);
 
+  // const getImagePath = (products: ProductData[], productId: string, imageId: string): string => {
 
+  //   // Find the product in the products array by productId
+  //   const product = products.find(product => product.id === productId);
+  //   if (product) {
+  //     // Find the image in the product's images array by imageId
+  //     const image = product.images.find(image => image.id === imageId);
+  //     if (image) {
+  //       // Return the concatenated image path
+  //       return `${apiURL}/${image.image}`; // Concatenate apiURL with image path
+        
+  //     }
+  //   }
+  //   // Return path to default image if no image found
+  //   return Logo; // Return path to default image
+  // };
 
 
   return (
     <>
-      {isVisible && <div className="fixed top-0 left-0 w-2/3 h-full bg-gray-500 opacity-65 z-50 z-index: 50"></div>}
+      {isVisible && <div className="fixed top-0 left-0 w-2/3 h-full bg-gray-500 opacity-20 z-50 z-index: 50"></div>}
       <div className="fixed right-0 top-0 bottom-0 flex" style={{ width: '33%' }}>
         {/* Shopping Bag Component */}
         <div ref={ref} className={`bg-secondary-yellow max-h-80 overflow-y-auto p-3 ${isVisible ? 'block' : 'hidden'}`} style={{ width: '100%', maxWidth: '' }}>
@@ -65,7 +122,7 @@ const ShoppingBagComponent: React.FC<ShoppingBagProps> = ({ isVisible, toggleVis
               <div key={index} className="">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center">
-                    <img className="w-20 h-20 my-4 mb-0 object-contain mr-5" alt={item.product.name} src={item.product.image} />
+                  <img className="w-20 h-20 my-4 mb-0 object-contain mr-5" src={item.product.images && item.product.images.length > 0 ? `${apiURL}/${item.product.images[0].image}` : Logo} alt="Product Image" />
                     <div className='flex justify-between items-center'>
                     <button onClick={() => decrementQuantity(bagItems.indexOf(item))} className="text-primary-red bg-secondary-red hover:bg-primary-red hover:text-white p-3 rounded">-</button>
                       <p className="text-l font-bold pl-2 pr-2 mt-2">{item.quantity}</p>
@@ -82,7 +139,16 @@ const ShoppingBagComponent: React.FC<ShoppingBagProps> = ({ isVisible, toggleVis
                   <p>${item.product.price}</p> 
                 </div>
                 <div className=''>
-                  <p className='font-semibold'>${calculateSubtotal(item)}</p>
+
+                {/* {item.specifications.map((selectedOptionSpecs: SelectedOptionSpecifications, specIndex: number) => (
+                <div key={specIndex}>
+                  {selectedOptionSpecs.specifications.map((specification: SpecificationData, innerIndex: number) => (
+                    <p key={innerIndex}>{specification.specification_sku}</p>
+                  ))}
+                </div>
+              ))} */}
+
+                  <p className='font-semibold'>Product Total: ${calculateSubtotal(item)}</p>
                 </div>
               </div>
             ))

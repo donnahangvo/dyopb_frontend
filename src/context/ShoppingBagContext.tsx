@@ -22,17 +22,17 @@ interface ImageData {
     images: ImageData[];
   }
   
-  // interface VariationData {
-  //   id: number;
-  //   product: number;
-  //   name: string;
-  //   slug: string;
-  //   variation_sku: string;
-  //   description: string;
-  //   image: ImageData[]; 
-  //   thumbnail: ImageData[]; 
-  //   ordering: number;
-  // }
+  interface VariationData {
+    id: number;
+    product: number;
+    name: string;
+    slug: string;
+    variation_sku: string;
+    description: string;
+    image: ImageData[]; 
+    thumbnail: ImageData[]; 
+    ordering: number;
+  }
   
   interface OptionData {
     id: number;

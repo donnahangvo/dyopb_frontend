@@ -111,7 +111,7 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
   useEffect(() => {
     if (selectedProduct) {
 
-      console.log(selectedProduct)
+      // console.log(selectedProduct)
         // Check if product has options or specifications
         let priceFromOptions: number | null = null;
         let priceFromSpecifications: number | null = null;
@@ -119,7 +119,7 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
         if (selectedOption && selectedOption.price !== undefined) {
             // Find the lowest price among options
 
-            console.log("selected option",selectedOption)
+            // console.log("selected option",selectedOption)
 
             priceFromOptions = selectedOption.price;
         }
@@ -127,7 +127,7 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
         if (selectedSpecification && selectedSpecification.price !== undefined) {
             // Find the lowest price among specifications
 
-            console.log('selected specification', selectedSpecification)
+            // console.log('selected specification', selectedSpecification)
 
             priceFromSpecifications = selectedSpecification.price;
         }
